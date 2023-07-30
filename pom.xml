@@ -12,6 +12,7 @@
 
 	<modules>
 		<module>main-service</module>
+		<module>stats-service</module>
 	</modules>
 	<name>Explore With Me</name>
 
