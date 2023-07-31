@@ -1,15 +1,72 @@
+# настройки Docker Compose:
 version: '3.1'
+# имена и описания контейнеров, которые должны быть развёрнуты
 services:
-  stats-server:
+  service:
+    # путь к директории, из которой нужно собрать образ контейнера
+    build: ./stats-service/service
+    container_name: service # устанавливаем имя контейнера
     ports:
       - "9090:9090"
+      # определяем пробрасываемые порты
+    depends_on:
+      # зависимости от других сервисов
+      - stats-db
+    environment:
+      # переменные среды
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
 
   stats-db:
+    # название сервиса
     image: postgres:14-alpine
+    # образ контейнера, основанный на PostgreSQL
+    container_name: stats-db
+    ports:
+      # пробрасываем порт 5432 контейнера на порт 6541 хоста
+      - "6541:5432"
+    volumes:
+      # сохраняем данные PostgreSQL между разными запусками контейнеров
+      - stats-db:/var/lib/postgresql/data
+      # монтируем том stats-db в директорию /var/lib/postgresql/data контейнера
+    environment:
+      - POSTGRES_DB=stats
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
 
-  ewm-service:
+  ewm-service: # название сервиса
+    build: ./main-service # путь к директории, из которой нужно собрать образ контейнера
+    container_name: ewm-service
     ports:
       - "8080:8080"
+      # пробрасываем порт 8080 контейнера на порт 8080 хоста
+    depends_on:
+      - ewm-db # зависит от сервиса ewm-db
+      - service # зависит от сервиса service
+    environment:
+      - SERVICE_URL=http://service:9090
+      # устанавливаем URL для подключения к сервису service
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm
+      # устанавливаем URL для подключения к базе данных ewm-db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
 
-  ewm-db:
+  ewm-db: # название сервиса
     image: postgres:14-alpine
+    container_name: ewm-db
+    ports:
+      # пробрасываем порт 5432 контейнера на порт 6542 хоста
+      - "6542:5432"
+    volumes:
+      # монтируем том для сохранения данных
+      - ewm-db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=ewm
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+
+volumes:
+  # определяет тома, устанавливаем имя томам
+  stats-db:
+  ewm-db:
