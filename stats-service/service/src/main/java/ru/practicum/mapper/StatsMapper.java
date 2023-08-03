@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import ru.practicum.HitRequestDto;
 import ru.practicum.StatsResponseDto;
 import ru.practicum.model.StatsModel;
+import ru.practicum.model.ViewStats;
 
 @UtilityClass
 public class StatsMapper {
@@ -15,11 +16,11 @@ public class StatsMapper {
                 .app(endpointHitRequestDto.getApp())
                 .build();
     }
-    public static StatsResponseDto toStatsResponseDto(StatsModel stats) {
+    public static StatsResponseDto toStatsResponseDto(ViewStats viewStats) {
         return StatsResponseDto.builder()
-                .app(stats.getApp())
-                .uri(stats.getUri())
-//                .hits(stats.g)
+                .app(viewStats.getApp())
+                .uri(viewStats.getUri())
+                .hits(viewStats.getCount())
                 .build();
     }
 }

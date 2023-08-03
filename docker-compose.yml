@@ -22,7 +22,7 @@ services:
     ports:
       - "6541:5432"
     environment:
-      POSTGRES_DB: stats
+      POSTGRES_DB: events
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
 

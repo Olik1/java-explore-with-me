@@ -27,10 +27,8 @@ public class StatisticController {
     @GetMapping("/stats")
     @ResponseStatus(HttpStatus.OK)
     public List<StatsResponseDto> getStatistic(@RequestParam("start")
-                                               @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                String start,
                                                @RequestParam("end")
-                                               @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                String end,
                                                @RequestParam(name = "uris", required = false, defaultValue = "")
                                                List<String> uris,
