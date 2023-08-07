@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -39,10 +40,12 @@ public class StatisticServiceImpl implements StatisticService {
      */
     @Override
     public List<StatsResponseDto> getStatistics(String start, String end, List<String> uris, Boolean unique) {
-        List<ViewStats> viewStatsList = new ArrayList<>();
-        List<StatsResponseDto> statsResponseDtos = new ArrayList<>();;
+        List<ViewStats> viewStatsList;
         LocalDateTime startTime = LocalDateTime.parse(start);//, DateTimeFormatter.ofPattern(TIME_FORMAT));
         LocalDateTime endTime = LocalDateTime.parse(end);//, DateTimeFormatter.ofPattern(TIME_FORMAT));
+        if (startTime.isAfter(endTime)) {
+            throw new IllegalArgumentException("Время начала не может быть позднее даты конца диапазона!");
+        }
         if (uris == null || uris.isEmpty()) {
             if(unique) {
                 viewStatsList = statisticRepository.findAllByDateBetweenUnique(startTime, endTime);
@@ -58,15 +61,8 @@ public class StatisticServiceImpl implements StatisticService {
 
         }
 
+        return viewStatsList.stream()
+                .map(StatsMapper::toStatsResponseDto).collect(Collectors.toList());
 
-        for (ViewStats viewStats : viewStatsList) {
-            statsResponseDtos.add(StatsMapper.toStatsResponseDto(viewStats));
-        }
-        return statsResponseDtos;
-
-
-
-        // 1. если список пуст возвращаем статистику между start и end
-        // 2. если не пуст смотрим уникальны ли ip, если да возвращаем статистику по уникальным ip, если нет общую статистику
     }
 }

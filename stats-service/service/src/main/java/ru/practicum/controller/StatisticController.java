@@ -14,13 +14,14 @@ import java.util.List;
 
 @Validated
 @RestController
+@RequestMapping
 @RequiredArgsConstructor
 public class StatisticController {
     private final StatisticService statisticService;
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public void postEndpointHit(@Valid @RequestBody HitRequestDto hitRequestDto) {
+    public void postEndpointHit(@Validated @RequestBody HitRequestDto hitRequestDto) {
         statisticService.postHit(hitRequestDto);
     }
 
