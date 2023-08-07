@@ -1,19 +1,13 @@
 package ru.practicum.service;
 
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import ru.practicum.HitRequestDto;
 import ru.practicum.StatsResponseDto;
-import ru.practicum.mapper.StatsMapper;
 import ru.practicum.model.StatsModel;
 import ru.practicum.model.ViewStats;
 import ru.practicum.repository.StatisticRepository;
@@ -21,12 +15,11 @@ import ru.practicum.repository.StatisticRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,6 +29,7 @@ class StatisticServiceImplTest {
     @InjectMocks
     StatisticServiceImpl statisticService;
     private HitRequestDto hitRequestDto;
+
     @BeforeEach
     void beforeEach() {
         String param = "2023-08-04 13:37:00";
