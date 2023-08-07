@@ -6,13 +6,12 @@ services:
     container_name: service
     ports:
       - "9090:9090"
+    depends_on:
+      - stats-db
     environment:
-      STATS_SERVER_URL: http://stats-server:9090
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: 1234
-      SPRING_DATASOURCE_HOST: stats-db
-      SPRING_DATASOURCE_PORT: 5432
-      SPRING_DATASOURCE_NAME: stats
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
 
   stats-db:
     image: postgres:14-alpine
@@ -22,9 +21,9 @@ services:
     ports:
       - "6541:5432"
     environment:
-      POSTGRES_DB: events
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234
+      - POSTGRES_DB= events
+      - POSTGRES_USER= postgres
+      - POSTGRES_PASSWORD= 1234
 
   ewm-service:
     build: ./main-service
@@ -32,68 +31,9 @@ services:
     container_name: main-service
     ports:
       - "8080:8080"
-
-  ewm-db:
-    image: postgres:14-alpine
-
-
-
-
-## настройки Docker Compose:
-#version: '3.1' # имена и описания контейнеров, которые должны быть развёрнуты
-#services:
-#  service: # путь к директории, из которой нужно собрать образ контейнера
-#    build: ./stats-service/service
 #
-#    container_name: service # устанавливаем имя контейнера
-#    ports:
-#      - "9090:9090"  # определяем пробрасываемые порты
-#    depends_on:  # зависимости от других сервисов
-#      - stats-db
-#    environment:  # переменные среды
-#      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=1234
-#
-#  stats-db:  # название сервиса
-#    image: postgres:14-alpine # образ контейнера, основанный на PostgreSQL
-#    container_name: stats-db
-#    ports: # пробрасываем порт 5432 контейнера на порт 6541 хоста
-#      - "6541:5432"
-#    volumes: # сохраняем данные PostgreSQL между разными запусками контейнеров
-#      - stats-db:/var/lib/postgresql/data # монтируем том stats-db в директорию /var/lib/postgresql/data контейнера
-#    environment:
-#      - POSTGRES_DB=stats
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=1234
-#
-#  ewm-service: # название сервиса
-#    build: ./main-service # путь к директории, из которой нужно собрать образ контейнера
-#    image: ewm-service-image
-#    container_name: ewm-service
-#    ports:
-#      - "8080:8080"   # пробрасываем порт 8080 контейнера на порт 8080 хоста
-#    depends_on:
-#      - ewm-db # зависит от сервиса ewm-db
-#      - service # зависит от сервиса service
-#    environment:
-#      - SERVICE_URL=http://service:9090  # устанавливаем URL для подключения к сервису service
-#      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm  # устанавливаем URL для подключения к базе данных ewm-db
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=1234
-#
-#  ewm-db: # название сервиса
-#    image: postgres:14-alpine
-#    container_name: ewm-db
-#    ports: # пробрасываем порт 5432 контейнера на порт 6542 хоста
-#      - "6542:5432"
-#    volumes:  # монтируем том для сохранения данных
-#      - ewm-db:/var/lib/postgresql/data
-#    environment:
-#      - POSTGRES_DB=ewm
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=1234
-#
-#volumes: # определяет тома, устанавливаем имя томам
-#  stats-db:
 #  ewm-db:
+#    image: postgres:14-alpine
+
+
+

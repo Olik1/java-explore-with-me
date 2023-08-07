@@ -71,12 +71,10 @@ class StatisticServiceImplTest {
 
         when(statisticRepository.findAllByDateBetweenUnique(start, end)).thenReturn(viewStatsList);
 
-        List<StatsResponseDto> result = statisticService.getStatistics("2023-08-04T00:00:00", "2023-08-05T00:00:00", uris, unique);
+        List<StatsResponseDto> result = statisticService.getStatistics("2023-08-04 00:00:00", "2023-08-05 00:00:00", uris, unique);
 
         assertEquals(2, result.size());
-//        assertEquals(LocalDateTime.of(2023, 8, 4, 10, 0, 0), result.get(0).g());
         assertEquals("uri1", result.get(0).getUri());
-//        assertEquals(LocalDateTime.of(2023, 8, 4, 12, 0, 0), result.get(1).getDate());
         assertEquals("uri2", result.get(1).getUri());
     }
 }

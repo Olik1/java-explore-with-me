@@ -11,7 +11,6 @@ import ru.practicum.repository.StatisticRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,13 +40,16 @@ public class StatisticServiceImpl implements StatisticService {
     @Override
     public List<StatsResponseDto> getStatistics(String start, String end, List<String> uris, Boolean unique) {
         List<ViewStats> viewStatsList;
-        LocalDateTime startTime = LocalDateTime.parse(start);//, DateTimeFormatter.ofPattern(TIME_FORMAT));
-        LocalDateTime endTime = LocalDateTime.parse(end);//, DateTimeFormatter.ofPattern(TIME_FORMAT));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
+
+        LocalDateTime startTime = LocalDateTime.parse(start, formatter);
+
+        LocalDateTime endTime = LocalDateTime.parse(end, formatter);
         if (startTime.isAfter(endTime)) {
             throw new IllegalArgumentException("Время начала не может быть позднее даты конца диапазона!");
         }
         if (uris == null || uris.isEmpty()) {
-            if(unique) {
+            if (unique) {
                 viewStatsList = statisticRepository.findAllByDateBetweenUnique(startTime, endTime);
             } else {
                 viewStatsList = statisticRepository.findAllByDateBetween(startTime, endTime);

@@ -18,9 +18,10 @@ import java.util.Map;
 public class StatsClient extends BaseClient {
     private static final String API_PREFIX_HIT = "/hit";
     private static final String API_PREFIX_START = "/start";
+    private static final String SERVER_URL = "http://localhost:9090";
 
     @Autowired
-    public StatsClient(@Value("${stats-service.url}") String serverUrl, RestTemplateBuilder builder) {
+    public StatsClient(@Value(SERVER_URL) String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
