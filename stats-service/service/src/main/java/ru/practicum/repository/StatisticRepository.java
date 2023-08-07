@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface StatisticRepository extends JpaRepository<StatsModel, Long> {
-        @Query("select new ru.practicum.model.ViewStats(e.app, e.uri, count(e.ip)) " +
+    @Query("select new ru.practicum.model.ViewStats(e.app, e.uri, count(e.ip)) " +
             "from StatsModel e " +
             "where e.timestamp between :start and :end " +
             "group by e.app, e.uri " +
@@ -20,13 +20,14 @@ public interface StatisticRepository extends JpaRepository<StatsModel, Long> {
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end
     );
+
     @Query("select new ru.practicum.model.ViewStats(e.app, e.uri, count(distinct e.ip)) " +
             "from StatsModel e " +
             "where e.timestamp between :start and :end " +
             "group by e.app, e.uri " +
             "order by count(e.ip) desc"
     )
-    List<ViewStats> findAllByDateBetweenUnique (
+    List<ViewStats> findAllByDateBetweenUnique(
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end
     );
@@ -43,6 +44,7 @@ public interface StatisticRepository extends JpaRepository<StatsModel, Long> {
             @Param("end") LocalDateTime end,
             @Param("uris") List<String> uri
     );
+
     @Query("select new ru.practicum.model.ViewStats(e.app, e.uri, count(distinct e.ip)) " +
             "from StatsModel e " +
             "where e.timestamp between :start and :end " +

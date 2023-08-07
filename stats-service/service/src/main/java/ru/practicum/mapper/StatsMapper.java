@@ -16,6 +16,7 @@ public class StatsMapper {
                 .app(endpointHitRequestDto.getApp())
                 .build();
     }
+
     public static StatsResponseDto toStatsResponseDto(ViewStats viewStats) {
         return StatsResponseDto.builder()
                 .app(viewStats.getApp())

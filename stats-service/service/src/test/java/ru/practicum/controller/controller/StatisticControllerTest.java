@@ -116,6 +116,7 @@ class StatisticControllerTest {
 
         verify(statisticService, never()).getStatistics(any(), any(), anyList(), any());
     }
+
     @SneakyThrows
     @Test
     public void getStatistic_WhenUniqueValueIsNotValid_thenReturnedBadRequest() {
