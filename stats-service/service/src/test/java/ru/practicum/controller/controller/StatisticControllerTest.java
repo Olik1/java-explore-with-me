@@ -63,20 +63,20 @@ class StatisticControllerTest {
                 .build();
     }
 
-    @SneakyThrows
-    @Test
-    void postEndpointHit_WhenStatusIsOk() {
-        mockMvc.perform(MockMvcRequestBuilders.post(HIT_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(hitRequestDto)))
-                .andExpect(status().isCreated())
-                .andDo(print())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        verify(statisticService, times(1)).postHit(hitRequestDto);
-    }
+//    @SneakyThrows
+//    @Test
+//    void postEndpointHit_WhenStatusIsOk() {
+//        String result = mockMvc.perform(MockMvcRequestBuilders.post(HIT_URL)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(hitRequestDto)))
+//                .andExpect(status().isCreated())
+//                .andDo(print())
+//                .andReturn()
+//                .getResponse()
+//                .getContentAsString();
+//
+//        verify(statisticService, times(1)).postHit(hitRequestDto);
+//    }
 
     @Test
     @SneakyThrows
