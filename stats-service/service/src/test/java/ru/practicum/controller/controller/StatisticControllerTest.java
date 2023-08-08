@@ -18,6 +18,8 @@ import ru.practicum.StatsResponseDto;
 import ru.practicum.controller.StatisticController;
 import ru.practicum.service.StatisticService;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
