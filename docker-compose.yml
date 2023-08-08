@@ -21,9 +21,9 @@ services:
     ports:
       - "6541:5432"
     environment:
-      - POSTGRES_DB= events
-      - POSTGRES_USER= postgres
-      - POSTGRES_PASSWORD= 1234
+      - POSTGRES_DB=events
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
 
   ewm-service:
     build: ./main-service
