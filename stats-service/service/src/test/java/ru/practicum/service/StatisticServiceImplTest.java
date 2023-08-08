@@ -29,6 +29,7 @@ class StatisticServiceImplTest {
     @InjectMocks
     StatisticServiceImpl statisticService;
     private HitRequestDto hitRequestDto;
+
     @BeforeEach
     void beforeEach() {
         String param = "2023-08-04 13:37:00";
