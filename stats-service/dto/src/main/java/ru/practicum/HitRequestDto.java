@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
@@ -21,6 +22,6 @@ public class HitRequestDto {
     @NotBlank(message = "IP пользователя не может быть пустым")
     private String ip;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @NotBlank(message = "Время отправления запроса не может быть пустым")
+    @NotNull(message = "Время отправления запроса не может быть пустым")
     private LocalDateTime timestamp;
 }
