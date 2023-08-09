@@ -10,7 +10,6 @@ import ru.practicum.model.ViewStats;
 import ru.practicum.repository.StatisticRepository;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StatisticServiceImpl implements StatisticService {
     private final StatisticRepository statisticRepository;
-    public static final String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+//    public static final String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * Сохранение информации о том, что на uri конкретного сервиса был отправлен запрос пользователем.
@@ -38,27 +37,27 @@ public class StatisticServiceImpl implements StatisticService {
      * unique - нужно ли учитывать только уникальные ip
      */
     @Override
-    public List<StatsResponseDto> getStatistics(String start, String end, List<String> uris, Boolean unique) {
+    public List<StatsResponseDto> getStatistics(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         List<ViewStats> viewStatsList;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
-
-        LocalDateTime startTime = LocalDateTime.parse(start, formatter);
-
-        LocalDateTime endTime = LocalDateTime.parse(end, formatter);
-        if (startTime.isAfter(endTime)) {
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
+//
+//        LocalDateTime startTime = LocalDateTime.parse(start, formatter);
+//
+//        LocalDateTime endTime = LocalDateTime.parse(end, formatter);
+        if (start.isAfter(end)) {
             throw new IllegalArgumentException("Время начала не может быть позднее даты конца диапазона!");
         }
         if (uris == null || uris.isEmpty()) {
             if (unique) {
-                viewStatsList = statisticRepository.findAllByDateBetweenUnique(startTime, endTime);
+                viewStatsList = statisticRepository.findAllByDateBetweenUnique(start, end);
             } else {
-                viewStatsList = statisticRepository.findAllByDateBetween(startTime, endTime);
+                viewStatsList = statisticRepository.findAllByDateBetween(start, end);
             }
         } else {
             if (unique) {
-                viewStatsList = statisticRepository.findAllByDateBetweenUnique(startTime, endTime, uris);
+                viewStatsList = statisticRepository.findAllByDateBetweenUnique(start, end, uris);
             } else {
-                viewStatsList = statisticRepository.findAllByDateBetween(startTime, endTime, uris);
+                viewStatsList = statisticRepository.findAllByDateBetween(start, end, uris);
             }
 
         }

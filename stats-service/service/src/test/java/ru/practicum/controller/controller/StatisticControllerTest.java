@@ -22,7 +22,8 @@ import java.time.format.DateTimeFormatter;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -80,13 +81,15 @@ class StatisticControllerTest {
     @Test
     @SneakyThrows
     void getStatistic_WhenStatusIsOk() {
-        String start = "2023-03-30 00:00:00";
-        String end = "2024-03-00 00:00:00";
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = start.plusHours(1);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         mockMvc.perform(get(STATS_URL)
-                        .param("start", start)
-                        .param("end", end)
-                        .param("uris", "/value, /value1")
+                        .param("start", start.format(formatter))
+                        .param("end", end.format(formatter))
+                        .param("uris", "/value", "/value1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn()

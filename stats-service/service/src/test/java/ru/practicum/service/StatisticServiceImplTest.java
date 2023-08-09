@@ -13,7 +13,6 @@ import ru.practicum.model.ViewStats;
 import ru.practicum.repository.StatisticRepository;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,14 +31,14 @@ class StatisticServiceImplTest {
 
     @BeforeEach
     void beforeEach() {
-        String param = "2023-08-04 13:37:00";
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime timestamp = LocalDateTime.parse(param, dateTimeFormatter);
+//        String param = "2023-08-04 13:37:00";
+//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//        LocalDateTime timestamp = LocalDateTime.parse(param, dateTimeFormatter);
         hitRequestDto = HitRequestDto.builder()
                 .app("app")
                 .ip("ip")
                 .uri("uri")
-                .timestamp(timestamp)
+                .timestamp(LocalDateTime.now())
                 .build();
     }
 
@@ -65,7 +64,7 @@ class StatisticServiceImplTest {
 
         when(statisticRepository.findAllByDateBetweenUnique(start, end)).thenReturn(viewStatsList);
 
-        List<StatsResponseDto> result = statisticService.getStatistics("2023-08-04 00:00:00", "2023-08-05 00:00:00", uris, unique);
+        List<StatsResponseDto> result = statisticService.getStatistics(LocalDateTime.of(2023, 8, 4, 0, 0, 0), LocalDateTime.of(2023, 8, 5, 0, 0, 0), uris, unique);
 
         assertEquals(2, result.size());
         assertEquals("uri1", result.get(0).getUri());
