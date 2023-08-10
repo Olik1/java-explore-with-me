@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StatisticServiceImpl implements StatisticService {
     private final StatisticRepository statisticRepository;
-//    public static final String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * Сохранение информации о том, что на uri конкретного сервиса был отправлен запрос пользователем.
@@ -39,11 +38,7 @@ public class StatisticServiceImpl implements StatisticService {
     @Override
     public List<StatsResponseDto> getStatistics(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         List<ViewStats> viewStatsList;
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
-//
-//        LocalDateTime startTime = LocalDateTime.parse(start, formatter);
-//
-//        LocalDateTime endTime = LocalDateTime.parse(end, formatter);
+
         if (start.isAfter(end)) {
             throw new IllegalArgumentException("Время начала не может быть позднее даты конца диапазона!");
         }

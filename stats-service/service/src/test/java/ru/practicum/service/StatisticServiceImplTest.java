@@ -31,9 +31,7 @@ class StatisticServiceImplTest {
 
     @BeforeEach
     void beforeEach() {
-//        String param = "2023-08-04 13:37:00";
-//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//        LocalDateTime timestamp = LocalDateTime.parse(param, dateTimeFormatter);
+
         hitRequestDto = HitRequestDto.builder()
                 .app("app")
                 .ip("ip")
@@ -52,7 +50,6 @@ class StatisticServiceImplTest {
 
     @Test
     void getStatistics() {
-        // Arrange
         LocalDateTime start = LocalDateTime.of(2023, 8, 4, 0, 0, 0);
         LocalDateTime end = LocalDateTime.of(2023, 8, 5, 0, 0, 0);
         List<String> uris = new ArrayList<>();

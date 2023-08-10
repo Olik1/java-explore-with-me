@@ -36,12 +36,6 @@ public class StatsClient extends BaseClient {
 
     public ResponseEntity<Object> getStatistic(String start, String end,
                                                List<String> uris, Boolean unique) {
-//        Map<String, Object> parameters = Map.of(
-//                "start", start,
-//                "end", end,
-//                "uris", uris,
-//                "unique", unique
-//        );
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("start", start);
         parameters.put("end", end);
