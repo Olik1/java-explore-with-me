@@ -24,8 +24,7 @@ public class AdminUserController {
                                           @RequestParam(required = false, defaultValue = "0")
                                @PositiveOrZero Integer from,
                                           @RequestParam(required = false, defaultValue = "10")
-                               @PositiveOrZero Integer size
-    ) {
+                               @PositiveOrZero Integer size) {
         return userService.getUsers(ids, from, size);
     }
     @PostMapping

@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     public List<UserResponseDto> getUsers(List<Long> ids, Integer from, Integer size) {
