@@ -1,4 +1,4 @@
-package ru.practicum.main_service.events;
+package ru.practicum.main_service.events.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.main_service.events.Events;
+import ru.practicum.main_service.events.model.Events;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class CompilationsResponseDto {
     private Long id;
     //Закреплена ли подборка на главной странице сайта
-    private Boolean pinned;
+    private Boolean isPinned;
     private String title;
     private List<Events> events;
 

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.main_service.events.Events;
+import ru.practicum.main_service.events.model.Events;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,8 +19,8 @@ public class Compilations {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
-    private Boolean pinned;
+    @Column(name = "is_pinned")
+    private Boolean isPinned;
 
     @Column(nullable = false)
     private String title;

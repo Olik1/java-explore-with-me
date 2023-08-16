@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.main_service.exception.ObjectNotFoundException;
-import ru.practicum.main_service.users.dto.UserRequestDto;
-import ru.practicum.main_service.users.dto.UserResponseDto;
+import ru.practicum.main_service.users.dto.NewUserRequestDto;
+import ru.practicum.main_service.users.dto.UserDto;
 import ru.practicum.main_service.users.dto.UserMapper;
 import ru.practicum.main_service.users.model.User;
 import ru.practicum.main_service.users.repository.UserRepository;
@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public List<UserResponseDto> getUsers(List<Long> ids, Integer from, Integer size) {
+    public List<UserDto> getUsers(List<Long> ids, Integer from, Integer size) {
         int offset = from > 0 ? from / size : 0;
         PageRequest page = PageRequest.of(offset, size);
         List<User> users;
@@ -32,14 +32,14 @@ public class UserServiceImpl implements UserService {
         }
         log.info("Запрос GET на поиск пользователей, с ids: {}", ids);
 
-        return users.stream().map(UserMapper::toUserResponseDto).collect(Collectors.toList());
+        return users.stream().map(UserMapper::toUserDto).collect(Collectors.toList());
     }
 
     @Override
-    public UserRequestDto createUser(UserRequestDto userRequestDto) {
+    public UserDto createUser(NewUserRequestDto userRequestDto) {
         User user = UserMapper.toUser(userRequestDto);
         log.info("Запрос POST на сохранение пользователя: {}", user.getName());
-        return UserMapper.toUserRequestDto(userRepository.save(user));
+        return UserMapper.toUserDto(userRepository.save(user));
     }
 
     @Override

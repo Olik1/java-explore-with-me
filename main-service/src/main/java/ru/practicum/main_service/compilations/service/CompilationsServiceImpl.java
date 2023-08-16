@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import ru.practicum.main_service.compilations.dto.CompilationsResponseDto;
 import ru.practicum.main_service.compilations.model.Compilations;
 import ru.practicum.main_service.compilations.repository.CompilationsRepository;
+import ru.practicum.main_service.events.model.Events;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,8 +21,12 @@ public class CompilationsServiceImpl implements CompilationsService {
     public List<CompilationsResponseDto> getCompilations(Boolean pinned, Integer from, Integer size) {
         int offset = from > 0 ? from / size : 0;
         PageRequest page = PageRequest.of(offset, size);
-        List<Compilations> compilations;
-        
+        List<Compilations> compilations = compilationsRepository.findAllByIsPinned(pinned, page);
+        //создаем список с подборкой событий
+        List<Events> eventList = new ArrayList<>();//список событий входящий в подборку
+        for (Compilations compilation : compilations) {
+            eventList.addAll(compilation.getEvents()); //из compilation вытягиваем все события
+        }
 
 
         return null;

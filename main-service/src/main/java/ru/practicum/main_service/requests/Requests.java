@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.main_service.events.Events;
+import ru.practicum.main_service.events.model.Events;
 import ru.practicum.main_service.users.model.User;
 
 import javax.persistence.*;
