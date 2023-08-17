@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.main_service.categories.model.Categories;
-import ru.practicum.main_service.requests.State;
+import ru.practicum.main_service.request.model.State;
 import ru.practicum.main_service.users.model.User;
 
 import javax.persistence.*;

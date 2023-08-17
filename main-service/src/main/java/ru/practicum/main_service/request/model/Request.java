@@ -1,4 +1,4 @@
-package ru.practicum.main_service.requests;
+package ru.practicum.main_service.request.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Requests {
+public class Request {
     /**
      * Идентификатор
      */

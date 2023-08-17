@@ -6,9 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 //import ru.practicum.client.StatsClient;
-import ru.practicum.client.StatsClient;
 import ru.practicum.main_service.StatisticClient;
-import ru.practicum.main_service.categories.model.Categories;
 import ru.practicum.main_service.events.dto.EventFullDto;
 import ru.practicum.main_service.events.dto.EventShortDto;
 import ru.practicum.main_service.events.dto.EventsMapper;
@@ -16,12 +14,10 @@ import ru.practicum.main_service.events.model.Events;
 import ru.practicum.main_service.events.model.SortEvents;
 import ru.practicum.main_service.events.repository.EventsRepository;
 import ru.practicum.main_service.exception.ObjectNotFoundException;
-import ru.practicum.main_service.requests.State;
+import ru.practicum.main_service.request.model.State;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -57,7 +53,7 @@ public class EventsServiceImpl implements EventsService {
         }
         eventsList = eventsRepository.findAll();
         if(onlyAvailable.equals(true)) {
-            eventsList = eventsRepository;
+//            eventsList = eventsRepository;
         }
 
         return null;

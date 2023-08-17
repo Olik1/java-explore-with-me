@@ -19,4 +19,11 @@ public class ErrorHandler {
     public ErrorResponse handleObjectNotFound(final ObjectNotFoundException e) {
         return new ErrorResponse(String.format("object not found: %s", e.getMessage()));
     }
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleEventUpdateImpossible(ConflictException e) {
+        return new ErrorResponse(String.format("Incorrectly request %s", e.getMessage()));
+    }
+
 }
+
