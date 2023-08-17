@@ -9,6 +9,7 @@ import ru.practicum.main_service.events.dto.EventShortDto;
 import ru.practicum.main_service.events.model.SortEvents;
 import ru.practicum.main_service.events.service.EventsService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,9 +40,9 @@ public class EventsController {
         return eventsService.getEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
     }
     @GetMapping("/{id}")
-    public EventFullDto getEventById(@PathVariable(name = "id") Long eventId) {
+    public EventFullDto getEventById(@PathVariable(name = "id") Long eventId, String ip) {
 
-        return eventsService.getEventById(eventId);
+        return eventsService.getEventById(eventId, ip);
     }
 
 }

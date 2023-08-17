@@ -9,7 +9,9 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.HitRequestDto;
+import ru.practicum.StatsResponseDto;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +38,7 @@ public class StatsClient extends BaseClient {
         return post(API_PREFIX_HIT, hitRequestDto);
     }
 
-    public ResponseEntity<Object> getStatistic(String start, String end,
+    public List<StatsResponseDto> getStatistic(LocalDateTime start, LocalDateTime end,
                                                List<String> uris, Boolean unique) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("start", start);
@@ -44,6 +46,8 @@ public class StatsClient extends BaseClient {
         parameters.put("uris", String.join(",", uris));
         parameters.put("unique", unique);
 
-        return get(API_PREFIX_START + "?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
+        var view = get(API_PREFIX_START + "?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
+        return (List<StatsResponseDto>) view.getBody();
+
     }
 }

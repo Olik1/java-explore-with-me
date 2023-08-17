@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 //import ru.practicum.client.StatsClient;
 import ru.practicum.client.StatsClient;
+import ru.practicum.main_service.StatisticClient;
 import ru.practicum.main_service.categories.model.Categories;
 import ru.practicum.main_service.events.dto.EventFullDto;
 import ru.practicum.main_service.events.dto.EventShortDto;
@@ -16,6 +17,8 @@ import ru.practicum.main_service.events.model.SortEvents;
 import ru.practicum.main_service.events.repository.EventsRepository;
 import ru.practicum.main_service.exception.ObjectNotFoundException;
 import ru.practicum.main_service.requests.State;
+
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +28,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EventsServiceImpl implements EventsService {
     private final EventsRepository eventsRepository;
-    private final StatsClient statsClient;
+    private final StatisticClient statsClient;
 
     /**
      * в выдаче должны быть только опубликованные события;
@@ -52,6 +55,11 @@ public class EventsServiceImpl implements EventsService {
         } else {
             page = PageRequest.of(from, size);
         }
+        eventsList = eventsRepository.findAll();
+        if(onlyAvailable.equals(true)) {
+            eventsList = eventsRepository;
+        }
+
         return null;
     }
 /*
@@ -74,11 +82,12 @@ public class EventsServiceImpl implements EventsService {
      * нужно сохранить в сервисе статистики
      */
     @Override
-    public EventFullDto getEventById(Long eventId) {
+    public EventFullDto getEventById(Long eventId, String ip) {
         //TODO service statistic + count views
         Events events = eventsRepository.findByIdAndAndState(eventId, State.PUBLISHED) //событие должно быть опубликовано
                 .orElseThrow(() -> new ObjectNotFoundException("Не найдено опубликованное событие"));
-
+        statsClient.saveHit("/events/" + eventId, ip);
+        Long view = statsClient.getViewsByEventId(eventId);
         return EventsMapper.eventFullDto(events);
     }
 
