@@ -88,8 +88,8 @@ public class Events {
      * Пользователь создавший событие
      */
     @ManyToOne
-    @JoinColumn(name = "creator_id", nullable = false)
-    private User creator;
+    @JoinColumn(name = "initiator_id", nullable = false)
+    private User initiator;
     /**
      *
      * Категория события

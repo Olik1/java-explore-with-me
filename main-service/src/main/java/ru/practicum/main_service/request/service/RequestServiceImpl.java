@@ -19,8 +19,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.practicum.main_service.request.model.State.CONFIRMED;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -50,7 +48,7 @@ public class RequestServiceImpl implements RequestService {
         Events event = getEventsById(eventId);
         Long limit = eventsRepository.findCountedRequestsByEventIdAndConfirmedStatus(eventId);
         // выбирает из Request, где поле `event.id` равно заданному `eventId` и поле `status` равно "CONFIRMED"
-        if (user.getId().equals(event.getCreator().getId())) {
+        if (user.getId().equals(event.getInitiator().getId())) {
             throw new ConflictException("инициатор события не может добавить запрос на участие в своём событии");
         }
         if (!event.getState().equals(State.PUBLISHED)) {

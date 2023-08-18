@@ -2,10 +2,11 @@ package ru.practicum.main_service.events.dto;
 
 import lombok.experimental.UtilityClass;
 import ru.practicum.main_service.categories.dto.CategoriesMapper;
+import ru.practicum.main_service.categories.dto.CategoryDto;
 import ru.practicum.main_service.events.model.Events;
+import ru.practicum.main_service.users.dto.UserDto;
 import ru.practicum.main_service.users.dto.UserMapper;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @UtilityClass
@@ -20,7 +21,7 @@ public class EventsMapper {
                 .description(events.getDescription())
                 .eventDate(events.getEventDate())
                 .id(events.getId())
-                .initiator(UserMapper.toUserDto(events.getCreator()))
+                .initiator(UserMapper.toUserDto(events.getInitiator()))
                 .paid(events.getPaid())
                 .participantLimit(events.getParticipantLimit())
                 .publishedOn(events.getPublishedOn())
@@ -29,13 +30,18 @@ public class EventsMapper {
                 .title(events.getTitle())
                 .build();
     }
+    public static EventShortDto toEventShortDto(Events events, CategoryDto categoryDto, UserDto userDto) {
+        return EventShortDto.builder()
+                .id(events.getId())
+                .annotation(events.getAnnotation())
+                .category(categoryDto)
+                .confirmedRequests(events.getParticipantLimit())
+                .eventDate(events.getEventDate())
+                .initiator(userDto)
+                .paid(events.getPaid())
+                .title(events.getTitle())
+                .build();
+
+    }
 }
-/*
 
-
-    private LocalDateTime publishedOn;
-    private Boolean requestModeration;
-    private String state;
-    private String title;
-    private Long views;
- */

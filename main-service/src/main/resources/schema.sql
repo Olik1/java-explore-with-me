@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS events
     state             VARCHAR                                 NOT NULL,
     createdOn         TIMESTAMP WITHOUT TIME ZONE,
     publishedOn       TIMESTAMP WITHOUT TIME ZONE,
-    creator_id        BIGINT REFERENCES users (id) ON DELETE CASCADE,
+    initiator_id        BIGINT REFERENCES users (id) ON DELETE CASCADE,
     categories_id     BIGINT REFERENCES categories (id) ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS events_compilations

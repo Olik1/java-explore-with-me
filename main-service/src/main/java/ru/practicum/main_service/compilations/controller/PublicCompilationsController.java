@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.main_service.compilations.dto.CompilationsResponseDto;
-import ru.practicum.main_service.compilations.service.CompilationsService;
+import ru.practicum.main_service.compilations.dto.CompilationDto;
+import ru.practicum.main_service.compilations.service.CompilationService;
 
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
@@ -17,15 +17,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/compilations")
 public class PublicCompilationsController {
-    private final CompilationsService compilationsService;
+    private final CompilationService compilationsService;
 
     @GetMapping
-    public List<CompilationsResponseDto> getCompilations(@RequestParam(required = false) Boolean pinned,
-                                                         @RequestParam(required = false, defaultValue = "0")
+    public List<CompilationDto> getCompilations(@RequestParam(required = false) Boolean pinned,
+                                                @RequestParam(required = false, defaultValue = "0")
                                                          @PositiveOrZero Integer from,
-                                                         @RequestParam(required = false, defaultValue = "10")
+                                                @RequestParam(required = false, defaultValue = "10")
                                                          @PositiveOrZero Integer size) {
         return compilationsService.getCompilations(pinned, from, size);
     }
+
 
 }
