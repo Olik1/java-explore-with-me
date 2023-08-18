@@ -4,12 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.main_service.events.dto.EventFullDto;
-import ru.practicum.main_service.events.dto.EventShortDto;
+import ru.practicum.main_service.events.dto.EventsFullDto;
+import ru.practicum.main_service.events.dto.EventsShortDto;
 import ru.practicum.main_service.events.model.SortEvents;
 import ru.practicum.main_service.events.service.EventsService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,25 +21,25 @@ public class EventsController {
     private final EventsService eventsService;
 
     @GetMapping
-    public List<EventShortDto> getEvents(@RequestParam(required = false) String text,
-                                             @RequestParam(required = false) List<Long> categories,
-                                             @RequestParam(required = false) Boolean paid,
-                                             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public List<EventsShortDto> getEvents(@RequestParam(required = false) String text,
+                                          @RequestParam(required = false) List<Long> categories,
+                                          @RequestParam(required = false) Boolean paid,
+                                          @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                              LocalDateTime rangeStart,
-                                             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                          @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                              LocalDateTime rangeEnd,
-                                             @RequestParam(required = false) Boolean onlyAvailable,
-                                             @RequestParam(required = false) SortEvents sort,
-                                             @RequestParam(required = false, defaultValue = "0")
+                                          @RequestParam(required = false) Boolean onlyAvailable,
+                                          @RequestParam(required = false) SortEvents sort,
+                                          @RequestParam(required = false, defaultValue = "0")
                                              @PositiveOrZero Integer from,
-                                             @RequestParam(required = false, defaultValue = "10")
+                                          @RequestParam(required = false, defaultValue = "10")
                                              @PositiveOrZero Integer size)
 
     {
         return eventsService.getEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
     }
     @GetMapping("/{id}")
-    public EventFullDto getEventById(@PathVariable(name = "id") Long eventId, String ip) {
+    public EventsFullDto getEventById(@PathVariable(name = "id") Long eventId, String ip) {
 
         return eventsService.getEventById(eventId, ip);
     }

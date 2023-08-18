@@ -22,16 +22,18 @@ public class AdminUserController {
     @GetMapping
     public List<UserDto> getUsers(@RequestParam(required = false) List<Long> ids,
                                   @RequestParam(required = false, defaultValue = "0")
-                               @PositiveOrZero Integer from,
+                                  @PositiveOrZero Integer from,
                                   @RequestParam(required = false, defaultValue = "10")
-                               @PositiveOrZero Integer size) {
+                                  @PositiveOrZero Integer size) {
         return userService.getUsers(ids, from, size);
     }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(@RequestBody @Valid NewUserRequestDto userRequestDto) {
         return userService.createUser(userRequestDto);
     }
+
     @DeleteMapping
     @RequestMapping("/{userId}")
     public void deleteUser(@PathVariable Long userId) {

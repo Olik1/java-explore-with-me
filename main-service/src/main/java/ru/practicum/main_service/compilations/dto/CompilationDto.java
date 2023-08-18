@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.main_service.events.dto.EventShortDto;
-import ru.practicum.main_service.events.model.Events;
+import ru.practicum.main_service.events.dto.EventsShortDto;
 
 import java.util.List;
 
@@ -16,9 +15,9 @@ import java.util.List;
 public class CompilationDto {
     private Long id;
     //Закреплена ли подборка на главной странице сайта
-    private Boolean isPinned;
+    private Boolean pinned;
     private String title;
-    private List<EventShortDto> events;
+    private List<EventsShortDto> events;
 
 
 }

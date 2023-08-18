@@ -7,8 +7,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 //import ru.practicum.client.StatsClient;
 import ru.practicum.main_service.StatisticClient;
-import ru.practicum.main_service.events.dto.EventFullDto;
-import ru.practicum.main_service.events.dto.EventShortDto;
+import ru.practicum.main_service.events.dto.EventsFullDto;
+import ru.practicum.main_service.events.dto.EventsShortDto;
 import ru.practicum.main_service.events.dto.EventsMapper;
 import ru.practicum.main_service.events.model.Events;
 import ru.practicum.main_service.events.model.SortEvents;
@@ -37,9 +37,9 @@ public class EventsServiceImpl implements EventsService {
      * нужно сохранить в сервисе статистики;
      */
     @Override
-    public List<EventShortDto> getEvents(String text, List<Long> categories, Boolean paid,
-                                         LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                                         Boolean onlyAvailable, SortEvents sort, Integer from, Integer size) {
+    public List<EventsShortDto> getEvents(String text, List<Long> categories, Boolean paid,
+                                          LocalDateTime rangeStart, LocalDateTime rangeEnd,
+                                          Boolean onlyAvailable, SortEvents sort, Integer from, Integer size) {
 
         //TODO service statistic + count views
 
@@ -78,13 +78,18 @@ public class EventsServiceImpl implements EventsService {
      * нужно сохранить в сервисе статистики
      */
     @Override
-    public EventFullDto getEventById(Long eventId, String ip) {
+    public EventsFullDto getEventById(Long eventId, String ip) {
         //TODO service statistic + count views
         Events events = eventsRepository.findByIdAndAndState(eventId, State.PUBLISHED) //событие должно быть опубликовано
                 .orElseThrow(() -> new ObjectNotFoundException("Не найдено опубликованное событие"));
         statsClient.saveHit("/events/" + eventId, ip);
         Long view = statsClient.getViewsByEventId(eventId);
         return EventsMapper.eventFullDto(events);
+    }
+
+    @Override
+    public EventsFullDto getEventsByUserId(Long userId, Integer from, Integer size) {
+        return null;
     }
 
 }

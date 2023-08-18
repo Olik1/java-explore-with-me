@@ -53,7 +53,7 @@ public class CategoriesServiceImpl implements CategoriesService {
     public CategoryDto updateCategories(CategoryDto categoryDto) {
         Categories categories = checkCategoriesIfExist(categoryDto.getId());
         categories.setName(categoryDto.getName());
-        log.info("Запрос Patch на изменение категории: c id: {}", categoryDto.getId());
+        log.info("Запрос PATH на изменение категории: c id: {}", categoryDto.getId());
         return CategoriesMapper.toCategoryDto(categoriesRepository.save(categories));
     }
 

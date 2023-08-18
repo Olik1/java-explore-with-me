@@ -1,16 +1,12 @@
 package ru.practicum.main_service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.UtilityClass;
-import net.bytebuddy.implementation.bytecode.ShiftRight;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import ru.practicum.HitRequestDto;
 import ru.practicum.StatsResponseDto;
 import ru.practicum.client.StatsClient;
-import ru.practicum.main_service.events.dto.EventFullDto;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 

@@ -35,5 +35,7 @@ public interface EventsRepository extends JpaRepository<Events, Long> {
 //    Long findCountedRequestsByEventIdAndConfirmedStatus(Long eventId);
     @Query("select count(r.id) from Request r where r.event.id = ?1 AND r.status = 'CONFIRMED'")
     Long findCountedRequestsByEventIdAndConfirmedStatus(Long eventId);
+    List<Events> findAllByIdIn(List<Long> ids);
+
 
 }

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Value
 @Builder
 @AllArgsConstructor
-public class EventShortDto {
+public class EventsShortDto {
 
     private Long id;
 

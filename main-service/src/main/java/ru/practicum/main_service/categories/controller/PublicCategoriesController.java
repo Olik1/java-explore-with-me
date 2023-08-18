@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/categories")
-public class CategoriesController {
+public class PublicCategoriesController {
     private final CategoriesService categoriesService;
     @GetMapping
     public List<CategoryDto> getCategories(

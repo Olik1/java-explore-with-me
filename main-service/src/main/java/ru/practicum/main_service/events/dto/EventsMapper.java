@@ -12,8 +12,8 @@ import java.time.format.DateTimeFormatter;
 @UtilityClass
 public class EventsMapper {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    public static EventFullDto eventFullDto(Events events) {
-        return EventFullDto.builder()
+    public static EventsFullDto eventFullDto(Events events) {
+        return EventsFullDto.builder()
                 .annotation(events.getAnnotation())
                 .categoryDto(CategoriesMapper.toCategoryDto(events.getCategories()))
 //                .confirmedRequests(0)
@@ -30,8 +30,8 @@ public class EventsMapper {
                 .title(events.getTitle())
                 .build();
     }
-    public static EventShortDto toEventShortDto(Events events, CategoryDto categoryDto, UserDto userDto) {
-        return EventShortDto.builder()
+    public static EventsShortDto toEventShortDto(Events events, CategoryDto categoryDto, UserDto userDto) {
+        return EventsShortDto.builder()
                 .id(events.getId())
                 .annotation(events.getAnnotation())
                 .category(categoryDto)
