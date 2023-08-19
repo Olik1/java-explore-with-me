@@ -41,15 +41,12 @@ public class Events {
     private LocalDateTime eventDate;
     /**
      *
-     * Широта места проведения события
+     * Широта и Долгота места проведения события
      */
-    @Column(nullable = false)
-    private Float lat;
-    /**
-     * Долгота места проведения события
-     */
-    @Column(nullable = false)
-    private Float lon;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id")
+    private Location location;
     /**
      * Нужно ли оплачивать участие
      */

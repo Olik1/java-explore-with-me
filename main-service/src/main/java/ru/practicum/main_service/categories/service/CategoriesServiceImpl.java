@@ -31,7 +31,7 @@ public class CategoriesServiceImpl implements CategoriesService {
 
     @Override
     public CategoryDto getCategoriesId(Long catId) {
-        Categories categories = checkCategoriesIfExist(catId);
+        Categories categories = getCategoriesIfExist(catId);
         return CategoriesMapper.toCategoryDto(categories);
     }
 
@@ -44,20 +44,20 @@ public class CategoriesServiceImpl implements CategoriesService {
 
     @Override
     public void deleteCategories(Long catId) {
-        checkCategoriesIfExist(catId);
+        getCategoriesIfExist(catId);
         categoriesRepository.deleteById(catId);
         log.info("Запрос DELETE на удаление категории: c id: {}", catId);
     }
 
     @Override
     public CategoryDto updateCategories(CategoryDto categoryDto) {
-        Categories categories = checkCategoriesIfExist(categoryDto.getId());
+        Categories categories = getCategoriesIfExist(categoryDto.getId());
         categories.setName(categoryDto.getName());
         log.info("Запрос PATH на изменение категории: c id: {}", categoryDto.getId());
         return CategoriesMapper.toCategoryDto(categoriesRepository.save(categories));
     }
 
-    public Categories checkCategoriesIfExist(Long catId) {
+    public Categories getCategoriesIfExist(Long catId) {
         return categoriesRepository.findById(catId).orElseThrow(
                 () -> new ObjectNotFoundException("Не найдена выбранная категория"));
     }

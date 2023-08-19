@@ -7,24 +7,32 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 //import ru.practicum.client.StatsClient;
 import ru.practicum.main_service.StatisticClient;
-import ru.practicum.main_service.events.dto.EventsFullDto;
-import ru.practicum.main_service.events.dto.EventsShortDto;
-import ru.practicum.main_service.events.dto.EventsMapper;
+import ru.practicum.main_service.categories.model.Categories;
+import ru.practicum.main_service.categories.repository.CategoriesRepository;
+import ru.practicum.main_service.events.dto.*;
 import ru.practicum.main_service.events.model.Events;
+import ru.practicum.main_service.events.model.Location;
 import ru.practicum.main_service.events.model.SortEvents;
 import ru.practicum.main_service.events.repository.EventsRepository;
+import ru.practicum.main_service.exception.ConflictException;
 import ru.practicum.main_service.exception.ObjectNotFoundException;
 import ru.practicum.main_service.request.model.State;
+import ru.practicum.main_service.users.model.User;
+import ru.practicum.main_service.users.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class EventsServiceImpl implements EventsService {
     private final EventsRepository eventsRepository;
+    private final UserRepository userRepository;
     private final StatisticClient statsClient;
+    private final CategoriesRepository categoriesRepository;
+
 
     /**
      * в выдаче должны быть только опубликованные события;
@@ -46,13 +54,13 @@ public class EventsServiceImpl implements EventsService {
         String lowerCase = text.toLowerCase();
         PageRequest page;
         List<Events> eventsList;
-        if(sort.equals(SortEvents.EVENT_DATE)) {
-        page = PageRequest.of(from, size, Sort.by("eventDate"));
+        if (sort.equals(SortEvents.EVENT_DATE)) {
+            page = PageRequest.of(from, size, Sort.by("eventDate"));
         } else {
             page = PageRequest.of(from, size);
         }
         eventsList = eventsRepository.findAll();
-        if(onlyAvailable.equals(true)) {
+        if (onlyAvailable.equals(true)) {
 //            eventsList = eventsRepository;
         }
 
@@ -70,7 +78,6 @@ public class EventsServiceImpl implements EventsService {
  */
 
     /**
-     *
      * событие должно быть опубликовано
      * информация о событии должна включать в себя количество просмотров и
      * количество подтвержденных запросов
@@ -84,12 +91,49 @@ public class EventsServiceImpl implements EventsService {
                 .orElseThrow(() -> new ObjectNotFoundException("Не найдено опубликованное событие"));
         statsClient.saveHit("/events/" + eventId, ip);
         Long view = statsClient.getViewsByEventId(eventId);
-        return EventsMapper.eventFullDto(events);
+        return EventsMapper.toEventFullDto(events);
     }
 
     @Override
-    public EventsFullDto getEventsByUserId(Long userId, Integer from, Integer size) {
-        return null;
+    public List<EventsFullDto> getAllEventsByUserId(Long userId, Integer from, Integer size) {
+        int offset = from > 0 ? from / size : 0;
+        PageRequest page = PageRequest.of(offset, size);
+        List<Events> events = eventsRepository.findByInitiatorId(userId, page);
+        return events.stream().map(EventsMapper::toEventFullDto).collect(Collectors.toList());
     }
 
+    @Override
+    public EventsFullDto createEvents(Long userId, NewEventDto newEventDto) {
+        //если в пре-модерация заявок на участие ничего нет, то устанавливаем true
+        if (newEventDto.getRequestModeration() == null) {
+            newEventDto.setRequestModeration(true);
+        }
+        LocalDateTime time = newEventDto.getEventDate();
+        if (time.isBefore(LocalDateTime.now().plusHours(2))) {
+            throw new ConflictException("Cобытие не может быть раньше, чем через два часа от текущего момента!");
+        }
+        User user = getUser(userId);
+        Location location = LocationMapper.toDto(newEventDto.getLocation());
+        Categories categories = getCategoriesIfExist(newEventDto.getCategory());
+        Events events = EventsMapper.toEvent(newEventDto, categories, location, user);
+        Events result = eventsRepository.save(events);
+        return EventsMapper.toEventFullDto(result);
+    }
+
+    @Override
+    public EventsFullDto getEventsByUserId(Long userId, Long eventId) {
+        Events events = eventsRepository.findByInitiatorIdAndId(userId, eventId).orElseThrow(
+                () -> new ObjectNotFoundException("событие не найдено у пользователя!"));
+
+        return EventsMapper.toEventFullDto(events);
+    }
+
+    private User getUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new ObjectNotFoundException("Такого пользователя не существует!"));
+    }
+    public Categories getCategoriesIfExist(Long catId) {
+        return categoriesRepository.findById(catId).orElseThrow(
+                () -> new ObjectNotFoundException("Не найдена выбранная категория"));
+    }
 }

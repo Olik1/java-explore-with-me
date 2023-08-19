@@ -1,5 +1,6 @@
 package ru.practicum.main_service.events.repository;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -35,6 +36,9 @@ public interface EventsRepository extends JpaRepository<Events, Long> {
 //    Long findCountedRequestsByEventIdAndConfirmedStatus(Long eventId);
     @Query("select count(r.id) from Request r where r.event.id = ?1 AND r.status = 'CONFIRMED'")
     Long findCountedRequestsByEventIdAndConfirmedStatus(Long eventId);
+//    Page<Event> findByInitiatorId(Long initiatorId, Pageable page);
+    List<Events> findByInitiatorId(Long initiatorId, Pageable pageable);
+    Optional<Events> findByInitiatorIdAndId(Long initiatorId, Long eventId);
     List<Events> findAllByIdIn(List<Long> ids);
 
 
