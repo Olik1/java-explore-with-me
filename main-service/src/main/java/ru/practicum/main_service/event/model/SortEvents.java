@@ -1,4 +1,4 @@
-package ru.practicum.main_service.events.model;
+package ru.practicum.main_service.event.model;
 
 public enum SortEvents {
     /**

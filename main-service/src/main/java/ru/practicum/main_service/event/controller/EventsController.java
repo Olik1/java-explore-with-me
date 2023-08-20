@@ -1,13 +1,13 @@
-package ru.practicum.main_service.events.controller;
+package ru.practicum.main_service.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.main_service.events.dto.EventsFullDto;
-import ru.practicum.main_service.events.dto.EventsShortDto;
-import ru.practicum.main_service.events.model.SortEvents;
-import ru.practicum.main_service.events.service.EventsService;
+import ru.practicum.main_service.event.dto.EventsFullDto;
+import ru.practicum.main_service.event.dto.EventsShortDto;
+import ru.practicum.main_service.event.model.SortEvents;
+import ru.practicum.main_service.event.service.EventsService;
 
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;

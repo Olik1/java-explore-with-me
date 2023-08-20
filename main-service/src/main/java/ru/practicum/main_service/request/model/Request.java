@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.main_service.events.model.Events;
+import ru.practicum.main_service.event.model.Event;
+import ru.practicum.main_service.event.model.State;
 import ru.practicum.main_service.users.model.User;
 
 import javax.persistence.*;
@@ -33,14 +34,14 @@ public class Request {
      */
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private State status;
+    private ParticipationRequestStatus status;
 
     @ManyToOne
     @JoinColumn(name = "requester_id", nullable = false)
     private User requester;
 
     @ManyToOne
-    @JoinColumn(name = "events_id", nullable = false)
-    private Events event;
+    @JoinColumn(name = "event_id", nullable = false)
+    private Event event;
 
 }

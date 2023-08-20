@@ -1,10 +1,8 @@
-package ru.practicum.main_service.events.dto;
+package ru.practicum.main_service.event.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import lombok.extern.jackson.Jacksonized;
-import ru.practicum.main_service.events.model.Location;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;

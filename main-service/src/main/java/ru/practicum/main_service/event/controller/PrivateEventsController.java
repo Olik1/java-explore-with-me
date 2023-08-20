@@ -1,12 +1,12 @@
-package ru.practicum.main_service.events.controller;
+package ru.practicum.main_service.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.main_service.events.dto.EventsFullDto;
-import ru.practicum.main_service.events.dto.NewEventDto;
-import ru.practicum.main_service.events.service.EventsService;
+import ru.practicum.main_service.event.dto.*;
+import ru.practicum.main_service.event.service.EventsService;
+import ru.practicum.main_service.request.dto.ParticipationRequestDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
@@ -42,4 +42,23 @@ public class PrivateEventsController {
         return eventsService.getEventsByUserId(userId, eventId);
     }
 
+    @PatchMapping("/{eventId}")
+    public EventsFullDto updateEventsByUser(@PathVariable Long userId,
+                                            @PathVariable Long eventId,
+                                            @RequestBody @Valid UpdateEventUserRequestDto requestDto) {
+        return eventsService.updateEventsByUser(userId, eventId, requestDto);
+    }
+
+    @GetMapping("/{eventId}/requests")
+    public List<ParticipationRequestDto> getRequestUserEvents(@PathVariable Long userId,
+                                                              @PathVariable Long eventId) {
+        return eventsService.getRequestUserEvents(userId, eventId);
+    }
+
+    @PatchMapping("/{eventId}/requests")
+    public EventRequestStatusUpdateResult updateStatusRequestByUserIdForEvents(@PathVariable Long userId,
+                                                                               @PathVariable Long eventId,
+                                                                               @RequestBody @Valid EventRequestStatusUpdateRequest requestDto) {
+        return eventsService.updateStatusRequestByUserIdForEvents(userId, eventId, requestDto);
+    }
 }

@@ -1,10 +1,10 @@
-package ru.practicum.main_service.events.controller;
+package ru.practicum.main_service.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.main_service.events.service.EventsService;
+import ru.practicum.main_service.event.service.EventsService;
 
 @RestController
 @Slf4j

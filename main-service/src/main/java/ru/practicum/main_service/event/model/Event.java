@@ -1,11 +1,10 @@
-package ru.practicum.main_service.events.model;
+package ru.practicum.main_service.event.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.main_service.categories.model.Categories;
-import ru.practicum.main_service.request.model.State;
 import ru.practicum.main_service.users.model.User;
 
 import javax.persistence.*;
@@ -17,7 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Events {
+public class Event {
     /**
      * Идентификатор
      */

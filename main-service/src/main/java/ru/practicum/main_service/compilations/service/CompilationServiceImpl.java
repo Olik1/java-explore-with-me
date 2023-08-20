@@ -11,10 +11,10 @@ import ru.practicum.main_service.compilations.dto.NewCompilationDto;
 import ru.practicum.main_service.compilations.dto.UpdateCompilationRequest;
 import ru.practicum.main_service.compilations.model.Compilation;
 import ru.practicum.main_service.compilations.repository.CompilationRepository;
-import ru.practicum.main_service.events.dto.EventsShortDto;
-import ru.practicum.main_service.events.dto.EventsMapper;
-import ru.practicum.main_service.events.model.Events;
-import ru.practicum.main_service.events.repository.EventsRepository;
+import ru.practicum.main_service.event.dto.EventsShortDto;
+import ru.practicum.main_service.event.dto.mapper.EventsMapper;
+import ru.practicum.main_service.event.model.Event;
+import ru.practicum.main_service.event.repository.EventsRepository;
 import ru.practicum.main_service.exception.ObjectNotFoundException;
 import ru.practicum.main_service.users.dto.UserMapper;
 
@@ -55,7 +55,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
-        List<Events> events = eventsRepository.findAllById(newCompilationDto.getEvents());
+        List<Event> events = eventsRepository.findAllById(newCompilationDto.getEvents());
         Compilation compilation = CompilationMapper.toCompilation(newCompilationDto, events);
         Compilation result = compilationsRepository.save(compilation);
         log.info("Запрос POST на добавление новой подборки c id: {}", compilation.getId());
@@ -84,7 +84,7 @@ public class CompilationServiceImpl implements CompilationService {
             compilation.setTitle(request.getTitle());
         }
         Compilation result = compilationsRepository.save(compilation);
-        List<Events> events = eventsRepository.findAllById(request.getEvents());
+        List<Event> events = eventsRepository.findAllById(request.getEvents());
         log.info("Запрос PATH на изменение подборки событий по id: {}", compId);
 
         return CompilationMapper.toCompilationDto(result, maptoDto(events));
@@ -97,12 +97,12 @@ public class CompilationServiceImpl implements CompilationService {
         return CompilationMapper.toCompilationDto(compilation, maptoDto(compilation.getEvents()));
     }
 
-    private List<Events> getFromId(List<Long> evenIdList) {
-        List<Events> events = eventsRepository.findAllByIdIn(evenIdList);
+    private List<Event> getFromId(List<Long> evenIdList) {
+        List<Event> events = eventsRepository.findAllByIdIn(evenIdList);
         //Если размер списка  из репозитория != evenIdList, то -> не все события с id  были найдены
         if (events.size() != evenIdList.size()) {
             List<Long> list = new ArrayList<>();
-            for (Events event : events) {
+            for (Event event : events) {
                 Long id = event.getId();
                 list.add(id);
             }
@@ -113,7 +113,7 @@ public class CompilationServiceImpl implements CompilationService {
         return events;
     }
 
-    private List<EventsShortDto> maptoDto(List<Events> events) {
+    private List<EventsShortDto> maptoDto(List<Event> events) {
         List<EventsShortDto> eventShortDto = events.stream().map(event ->
                 EventsMapper.toEventShortDto(
                         event,

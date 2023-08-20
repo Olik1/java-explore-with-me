@@ -1,12 +1,12 @@
-package ru.practicum.main_service.events.dto;
+package ru.practicum.main_service.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import ru.practicum.main_service.categories.dto.CategoryDto;
-import ru.practicum.main_service.events.model.Location;
-import ru.practicum.main_service.request.model.State;
+import ru.practicum.main_service.event.model.Location;
+import ru.practicum.main_service.event.model.State;
 import ru.practicum.main_service.users.dto.UserDto;
 
 import java.time.LocalDateTime;

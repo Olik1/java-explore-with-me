@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.main_service.events.model.Events;
+import ru.practicum.main_service.event.model.Event;
 
 import javax.persistence.*;
 import java.util.List;
@@ -30,6 +30,6 @@ public class Compilation {
             joinColumns = @JoinColumn(name = "compilations_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "events_id", referencedColumnName = "id")
     )
-    private List<Events> events;
+    private List<Event> events;
 
 }
