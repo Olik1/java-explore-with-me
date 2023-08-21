@@ -9,7 +9,7 @@ import ru.practicum.main_service.event.model.State;
 import java.util.List;
 import java.util.Optional;
 
-public interface EventsRepository extends JpaRepository<Event, Long> {
+public interface EventRepository extends JpaRepository<Event, Long> {
     Optional<Event> findByIdAndAndState(Long eventId, State state);
 
     //    @Query("select e from Events e " +

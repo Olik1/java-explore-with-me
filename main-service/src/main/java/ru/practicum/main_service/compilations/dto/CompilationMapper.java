@@ -2,7 +2,7 @@ package ru.practicum.main_service.compilations.dto;
 
 import lombok.experimental.UtilityClass;
 import ru.practicum.main_service.compilations.model.Compilation;
-import ru.practicum.main_service.event.dto.EventsShortDto;
+import ru.practicum.main_service.event.dto.EventShortDto;
 import ru.practicum.main_service.event.model.Event;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class CompilationMapper {
                 .build();
 
     }
-    public static CompilationDto toCompilationDto (Compilation compilation, List<EventsShortDto> events) {
+    public static CompilationDto toCompilationDto (Compilation compilation, List<EventShortDto> events) {
         return CompilationDto.builder()
                 .pinned(compilation.getPinned())
                 .title(compilation.getTitle())

@@ -4,8 +4,8 @@ import lombok.experimental.UtilityClass;
 import ru.practicum.main_service.categories.dto.CategoriesMapper;
 import ru.practicum.main_service.categories.dto.CategoryDto;
 import ru.practicum.main_service.categories.model.Categories;
-import ru.practicum.main_service.event.dto.EventsFullDto;
-import ru.practicum.main_service.event.dto.EventsShortDto;
+import ru.practicum.main_service.event.dto.EventFullDto;
+import ru.practicum.main_service.event.dto.EventShortDto;
 import ru.practicum.main_service.event.dto.NewEventDto;
 import ru.practicum.main_service.event.model.Event;
 import ru.practicum.main_service.event.model.Location;
@@ -15,12 +15,14 @@ import ru.practicum.main_service.users.dto.UserMapper;
 import ru.practicum.main_service.users.model.User;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @UtilityClass
-public class EventsMapper {
+public class EventMapper {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    public static EventsFullDto toEventFullDto(Event event) {
-        return EventsFullDto.builder()
+    public static EventFullDto toEventFullDto(Event event) {
+        return EventFullDto.builder()
                 .annotation(event.getAnnotation())
                 .categoryDto(CategoriesMapper.toCategoryDto(event.getCategories()))
 //                .confirmedRequests(0)
@@ -37,8 +39,8 @@ public class EventsMapper {
                 .title(event.getTitle())
                 .build();
     }
-    public static EventsShortDto toEventShortDto(Event event, CategoryDto categoryDto, UserDto userDto) {
-        return EventsShortDto.builder()
+    public static EventShortDto toEventShortDto(Event event, CategoryDto categoryDto, UserDto userDto) {
+        return EventShortDto.builder()
                 .id(event.getId())
                 .annotation(event.getAnnotation())
                 .category(categoryDto)
@@ -64,6 +66,33 @@ public class EventsMapper {
                 .initiator(user)
                 .state(State.PENDING)
                 .build();
+    }
+    public EventFullDto mapToFullDto(Event event) {
+        EventFullDto dto = new EventFullDto();
+        dto.setAnnotation(event.getAnnotation());
+        dto.setCategoryDto(CategoriesMapper.toCategoryDto(event.getCategories()));
+        dto.setCreatedOn(event.getCreatedOn());
+        dto.setDescription(event.getDescription());
+        dto.setEventDate(event.getEventDate());
+        dto.setId(event.getId());
+        dto.setInitiator(UserMapper.toUserDto(event.getInitiator()));
+        dto.setLocation(LocationMapper.toLocationDto(event.getLocation()));
+        dto.setPaid(event.getPaid());
+        dto.setParticipantLimit(event.getParticipantLimit());
+        dto.setPublishedOn(event.getPublishedOn());
+        dto.setRequestModeration(event.getRequestModeration());
+        dto.setState(event.getState());
+        dto.setTitle(event.getTitle());
+        dto.setConfirmedRequests(event.getConfirmedRequests());
+        dto.setViews(event.getViews());
+        return dto;
+    }
+    public List<EventFullDto> mapToFullDto(Iterable<Event> events) {
+        List<EventFullDto> result = new ArrayList<>();
+        for (Event event : events) {
+            result.add(mapToFullDto(event));
+        }
+        return result;
     }
 }
 

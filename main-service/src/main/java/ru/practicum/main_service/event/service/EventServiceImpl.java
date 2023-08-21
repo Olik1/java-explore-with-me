@@ -10,12 +10,13 @@ import ru.practicum.main_service.StatisticClient;
 import ru.practicum.main_service.categories.model.Categories;
 import ru.practicum.main_service.categories.repository.CategoriesRepository;
 import ru.practicum.main_service.event.dto.*;
-import ru.practicum.main_service.event.dto.mapper.EventsMapper;
+import ru.practicum.main_service.event.dto.mapper.EventMapper;
 import ru.practicum.main_service.event.dto.mapper.LocationMapper;
 import ru.practicum.main_service.event.model.Event;
 import ru.practicum.main_service.event.model.Location;
 import ru.practicum.main_service.event.model.SortEvents;
-import ru.practicum.main_service.event.repository.EventsRepository;
+import ru.practicum.main_service.event.repository.CustomBuiltEventRepository;
+import ru.practicum.main_service.event.repository.EventRepository;
 import ru.practicum.main_service.exception.ConflictException;
 import ru.practicum.main_service.exception.ObjectNotFoundException;
 import ru.practicum.main_service.request.RequestRepository;
@@ -27,7 +28,9 @@ import ru.practicum.main_service.event.model.State;
 import ru.practicum.main_service.users.model.User;
 import ru.practicum.main_service.users.repository.UserRepository;
 
+import javax.validation.ValidationException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,12 +38,13 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class EventsServiceImpl implements EventsService {
-    private final EventsRepository eventsRepository;
+public class EventServiceImpl implements EventService {
+    private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final StatisticClient statsClient;
     private final CategoriesRepository categoriesRepository;
     private final RequestRepository requestRepository;
+    private final CustomBuiltEventRepository customBuiltEventRepository;
 
 
     /**
@@ -54,9 +58,9 @@ public class EventsServiceImpl implements EventsService {
      * нужно сохранить в сервисе статистики;
      */
     @Override
-    public List<EventsShortDto> getEvents(String text, List<Long> categories, Boolean paid,
-                                          LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                                          Boolean onlyAvailable, SortEvents sort, Integer from, Integer size) {
+    public List<EventShortDto> getEvents(String text, List<Long> categories, Boolean paid,
+                                         LocalDateTime rangeStart, LocalDateTime rangeEnd,
+                                         Boolean onlyAvailable, SortEvents sort, Integer from, Integer size) {
 
         //TODO service statistic + count views
 
@@ -68,23 +72,14 @@ public class EventsServiceImpl implements EventsService {
         } else {
             page = PageRequest.of(from, size);
         }
-        eventList = eventsRepository.findAll();
+        eventList = eventRepository.findAll();
         if (onlyAvailable.equals(true)) {
 //            eventsList = eventsRepository;
         }
 
         return null;
     }
-/*
-. В зависимости от значения sort происходит установка сортировки по полю eventDate
-или оставляется сортировка по умолчанию.
-6. В зависимости от значения onlyAvailable вызывается метод eventRepository.getAvailableEventsForUser
-или eventRepository.getEventsForUser для получения списка событий в базе данных.
-7. Если sort равен EventSort.VIEWS, вызывается метод sortEventsByViews для сортировки событий
-по количеству просмотров.
-8. Возвращается список events, который преобразуется с использованием метода parseToShortDtoWithMappers
-в список объектов EventShortDto с помощью потока и коллектора Collectors.toList().
- */
+
 
     /**
      * событие должно быть опубликовано
@@ -94,25 +89,25 @@ public class EventsServiceImpl implements EventsService {
      * нужно сохранить в сервисе статистики
      */
     @Override
-    public EventsFullDto getEventById(Long eventId, String ip) {
+    public EventFullDto getEventById(Long eventId, String ip) {
         //TODO service statistic + count views
-        Event event = eventsRepository.findByIdAndAndState(eventId, State.PUBLISHED) //событие должно быть опубликовано
+        Event event = eventRepository.findByIdAndAndState(eventId, State.PUBLISHED) //событие должно быть опубликовано
                 .orElseThrow(() -> new ObjectNotFoundException("Не найдено опубликованное событие"));
         statsClient.saveHit("/events/" + eventId, ip);
         Long view = statsClient.getViewsByEventId(eventId);
-        return EventsMapper.toEventFullDto(event);
+        return EventMapper.toEventFullDto(event);
     }
 
     @Override
-    public List<EventsFullDto> getAllEventsByUserId(Long userId, Integer from, Integer size) {
+    public List<EventFullDto> getAllEventsByUserId(Long userId, Integer from, Integer size) {
         int offset = from > 0 ? from / size : 0;
         PageRequest page = PageRequest.of(offset, size);
-        List<Event> events = eventsRepository.findByInitiatorId(userId, page);
-        return events.stream().map(EventsMapper::toEventFullDto).collect(Collectors.toList());
+        List<Event> events = eventRepository.findByInitiatorId(userId, page);
+        return events.stream().map(EventMapper::toEventFullDto).collect(Collectors.toList());
     }
 
     @Override
-    public EventsFullDto createEvents(Long userId, NewEventDto newEventDto) {
+    public EventFullDto createEvents(Long userId, NewEventDto newEventDto) {
         //если в пре-модерация заявок на участие ничего нет, то устанавливаем true
         if (newEventDto.getRequestModeration() == null) {
             newEventDto.setRequestModeration(true);
@@ -124,21 +119,21 @@ public class EventsServiceImpl implements EventsService {
         User user = getUser(userId);
         Location location = LocationMapper.toLocation(newEventDto.getLocation());
         Categories categories = getCategoriesIfExist(newEventDto.getCategory());
-        Event event = EventsMapper.toEvent(newEventDto, categories, location, user);
-        Event result = eventsRepository.save(event);
-        return EventsMapper.toEventFullDto(result);
+        Event event = EventMapper.toEvent(newEventDto, categories, location, user);
+        Event result = eventRepository.save(event);
+        return EventMapper.toEventFullDto(result);
     }
 
     @Override
-    public EventsFullDto getEventsByUserId(Long userId, Long eventId) {
-        Event event = eventsRepository.findByInitiatorIdAndId(userId, eventId).orElseThrow(
+    public EventFullDto getEventsByUserId(Long userId, Long eventId) {
+        Event event = eventRepository.findByInitiatorIdAndId(userId, eventId).orElseThrow(
                 () -> new ObjectNotFoundException("событие не найдено у пользователя!"));
 
-        return EventsMapper.toEventFullDto(event);
+        return EventMapper.toEventFullDto(event);
     }
 
     @Override
-    public EventsFullDto updateEventsByUser(Long userId, Long eventId, UpdateEventUserRequestDto requestDto) {
+    public EventFullDto updateEventsByUser(Long userId, Long eventId, UpdateEventUserRequestDto requestDto) {
         Event event = getEvents(eventId);
         if (event.getState().equals(State.PENDING)) {
             throw new ConflictException("Изменить можно только отмененные события или события в состоянии ожидания модерации!");
@@ -154,9 +149,9 @@ public class EventsServiceImpl implements EventsService {
                     event.setPublishedOn(LocalDateTime.now());
             }
         }
-        Event result = eventsRepository.save(event);
+        Event result = eventRepository.save(event);
 
-        return EventsMapper.toEventFullDto(result);
+        return EventMapper.toEventFullDto(result);
     }
 
     @Override
@@ -183,7 +178,7 @@ public class EventsServiceImpl implements EventsService {
      */
     @Override
     public EventRequestStatusUpdateResult updateStatusRequestByUserIdForEvents(Long userId, Long eventId,
-        EventRequestStatusUpdateRequest requestStatusUpdate) {
+                                                                               EventRequestStatusUpdateRequest requestStatusUpdate) {
         User user = getUser(userId);
         Event event = getEvents(eventId);
 
@@ -210,7 +205,7 @@ public class EventsServiceImpl implements EventsService {
                 rejected.add(request);
                 continue;
             }
-            if(requestStatusUpdate.getStatus().equals("CONFIRMED")) {
+            if (requestStatusUpdate.getStatus().equals("CONFIRMED")) {
                 if (confirmedRequests < event.getParticipantLimit()) {
                     request.setStatus(ParticipationRequestStatus.CONFIRMED);
                     confirmedRequests++;
@@ -225,11 +220,42 @@ public class EventsServiceImpl implements EventsService {
                 rejected.add(request);
             }
         }
-        eventsRepository.save(event);
+        eventRepository.save(event);
         requestRepository.saveAll(requestsToUpdate);
 
         return RequestMapper.toUpdateResultDto(confirmed, rejected);
     }
+
+    @Override
+    public List<EventFullDto> adminGetEvents(List<Long> userIds, List<State> states, List<Long> categories, String rangeStart, String rangeEnd, Integer from, Integer size) {
+        LocalDateTime start = null;
+        LocalDateTime end = null;
+        if (rangeStart != null) {
+            start = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
+        if (rangeEnd != null) {
+            end = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
+
+        if (start != null && end != null) {
+            if (start.isAfter(end)) {
+                throw new ValidationException("Дата начала  не может быть после даты завершения.");
+            }
+        }
+        Criteria criteria = Criteria.builder()
+                .users(userIds)
+                .states(states)
+                .categories(categories)
+                .from(from)
+                .size(size)
+                .rangeStart(start)
+                .rangeEnd(end)
+                .build();
+        List<Event> events = customBuiltEventRepository.getEvents(criteria);
+        log.info("Событи: {}.", events);
+        return EventMapper.mapToFullDto(events);
+    }
+
 
     private void updateEvents(Event event, UpdateEventUserRequestDto requestDto) {
         if (requestDto.getAnnotation() != null) {
@@ -271,7 +297,7 @@ public class EventsServiceImpl implements EventsService {
     }
 
     private Event getEvents(Long eventId) {
-        return eventsRepository.findById(eventId)
+        return eventRepository.findById(eventId)
                 .orElseThrow(() -> new ObjectNotFoundException("Такого мероприятия не существует!"));
     }
 

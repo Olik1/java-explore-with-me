@@ -93,5 +93,8 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "categories_id", nullable = false)
     private Categories categories;
-
+    @Transient
+    private Integer confirmedRequests;
+    @Transient
+    private Long views;
 }

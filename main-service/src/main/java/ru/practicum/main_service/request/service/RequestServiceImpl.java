@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.main_service.event.model.Event;
-import ru.practicum.main_service.event.repository.EventsRepository;
+import ru.practicum.main_service.event.repository.EventRepository;
 import ru.practicum.main_service.exception.ObjectNotFoundException;
 import ru.practicum.main_service.exception.ConflictException;
 import ru.practicum.main_service.request.RequestRepository;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestsRepository;
     private final UserRepository userRepository;
-    private final EventsRepository eventsRepository;
+    private final EventRepository eventRepository;
 
     @Override
     public List<ParticipationRequestDto> getRequest(Long userId) {
@@ -47,7 +47,7 @@ public class RequestServiceImpl implements RequestService {
     public ParticipationRequestDto createRequest(Long userId, Long eventId) {
         User user = getUserById(userId);
         Event event = getEventsById(eventId);
-        Long limit = eventsRepository.findCountedRequestsByEventIdAndConfirmedStatus(eventId);
+        Long limit = eventRepository.findCountedRequestsByEventIdAndConfirmedStatus(eventId);
         // выбирает из Request, где поле `event.id` равно заданному `eventId` и поле `status` равно "CONFIRMED"
         if (user.getId().equals(event.getInitiator().getId())) {
             throw new ConflictException("инициатор события не может добавить запрос на участие в своём событии");
@@ -92,7 +92,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     public Event getEventsById(Long eventId) {
-        return eventsRepository.findById(eventId).orElseThrow(
+        return eventRepository.findById(eventId).orElseThrow(
                 () -> new ObjectNotFoundException("Не найдено мероприятие по id!"));
     }
     public Request getRequestById(Long requestId) {
