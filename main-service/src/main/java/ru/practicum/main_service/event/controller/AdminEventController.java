@@ -2,18 +2,14 @@ package ru.practicum.main_service.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.main_service.event.dto.Criteria;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import ru.practicum.main_service.event.dto.EventFullDto;
+import ru.practicum.main_service.event.dto.UpdateEventRequestDto;
 import ru.practicum.main_service.event.model.State;
 import ru.practicum.main_service.event.service.EventService;
 
-import javax.validation.ValidationException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -33,5 +29,11 @@ public class AdminEventController {
                                              @RequestParam(defaultValue = "10") Integer size) {
 
         return eventService.adminGetEvents(users, states, categories, rangeStart, rangeEnd, from, size);
+    }
+    @PatchMapping("/{eventId}")
+    public EventFullDto patchAdminEvent(@PathVariable @Min(1) Long eventId,
+                                   @RequestBody @Validated UpdateEventRequestDto requestDto) {
+        EventFullDto eventFullDto = eventService.adminUpdateEvent(eventId, requestDto);
+        return eventFullDto;
     }
 }

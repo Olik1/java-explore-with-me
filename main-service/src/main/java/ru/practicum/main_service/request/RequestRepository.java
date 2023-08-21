@@ -3,7 +3,6 @@ package ru.practicum.main_service.request;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.practicum.main_service.request.model.ParticipationRequestStatus;
 import ru.practicum.main_service.request.model.Request;
-import ru.practicum.main_service.event.model.State;
 
 import java.util.List;
 

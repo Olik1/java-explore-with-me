@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-//import ru.practicum.client.StatsClient;
 import ru.practicum.main_service.StatisticClient;
 import ru.practicum.main_service.categories.model.Categories;
 import ru.practicum.main_service.categories.repository.CategoriesRepository;
@@ -15,6 +14,7 @@ import ru.practicum.main_service.event.dto.mapper.LocationMapper;
 import ru.practicum.main_service.event.model.Event;
 import ru.practicum.main_service.event.model.Location;
 import ru.practicum.main_service.event.model.SortEvents;
+import ru.practicum.main_service.event.model.State;
 import ru.practicum.main_service.event.repository.CustomBuiltEventRepository;
 import ru.practicum.main_service.event.repository.EventRepository;
 import ru.practicum.main_service.exception.ConflictException;
@@ -24,7 +24,6 @@ import ru.practicum.main_service.request.dto.ParticipationRequestDto;
 import ru.practicum.main_service.request.dto.RequestMapper;
 import ru.practicum.main_service.request.model.ParticipationRequestStatus;
 import ru.practicum.main_service.request.model.Request;
-import ru.practicum.main_service.event.model.State;
 import ru.practicum.main_service.users.model.User;
 import ru.practicum.main_service.users.repository.UserRepository;
 
@@ -133,7 +132,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto updateEventsByUser(Long userId, Long eventId, UpdateEventUserRequestDto requestDto) {
+    public EventFullDto updateEventsByUser(Long userId, Long eventId, UpdateEventRequestDto requestDto) {
         Event event = getEvents(eventId);
         if (event.getState().equals(State.PENDING)) {
             throw new ConflictException("Изменить можно только отмененные события или события в состоянии ожидания модерации!");
@@ -256,8 +255,39 @@ public class EventServiceImpl implements EventService {
         return EventMapper.mapToFullDto(events);
     }
 
+    @Override
+    public EventFullDto adminUpdateEvent(Long eventId, UpdateEventRequestDto requestDto) {
+        Event event = getEvents(eventId);
 
-    private void updateEvents(Event event, UpdateEventUserRequestDto requestDto) {
+        if (requestDto.getEventDate().isBefore(event.getPublishedOn().plusHours(1))) {
+            throw new ValidationException("дата начала изменяемого события должна быть не ранее чем за час от даты публикации");
+        }
+        switch (requestDto.getStateAction()) {
+            case PUBLISH_EVENT:
+                if (event.getState() != State.PENDING) {
+                    throw new ConflictException("Event state must be pending");
+                }
+                break;
+            case REJECT_EVENT:
+                if (event.getState() == State.PUBLISHED) {
+                    throw new ConflictException("Can't reject published event");
+                }
+                break;
+            case SEND_TO_REVIEW:
+            case CANCEL_REVIEW:
+                if (event.getState() == State.PUBLISHED) {
+                    throw new ConflictException("Event state must be pending or canceled");
+                }
+                break;
+        }
+        updateEvents(event, requestDto);
+        Event toUpdate = eventRepository.save(event);
+
+        return EventMapper.toEventFullDto(event);
+    }
+
+
+    private void updateEvents(Event event, UpdateEventRequestDto requestDto) {
         if (requestDto.getAnnotation() != null) {
             event.setAnnotation(requestDto.getAnnotation());
         }

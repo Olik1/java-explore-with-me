@@ -4,15 +4,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.main_service.event.model.Event;
+import ru.practicum.main_service.event.model.State;
 import ru.practicum.main_service.event.repository.EventRepository;
-import ru.practicum.main_service.exception.ObjectNotFoundException;
 import ru.practicum.main_service.exception.ConflictException;
+import ru.practicum.main_service.exception.ObjectNotFoundException;
 import ru.practicum.main_service.request.RequestRepository;
 import ru.practicum.main_service.request.dto.ParticipationRequestDto;
 import ru.practicum.main_service.request.dto.RequestMapper;
 import ru.practicum.main_service.request.model.ParticipationRequestStatus;
 import ru.practicum.main_service.request.model.Request;
-import ru.practicum.main_service.event.model.State;
 import ru.practicum.main_service.users.model.User;
 import ru.practicum.main_service.users.repository.UserRepository;
 

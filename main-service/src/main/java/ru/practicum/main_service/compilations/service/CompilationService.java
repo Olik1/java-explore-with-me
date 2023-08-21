@@ -1,6 +1,5 @@
 package ru.practicum.main_service.compilations.service;
 
-import org.springframework.web.bind.annotation.PathVariable;
 import ru.practicum.main_service.compilations.dto.CompilationDto;
 import ru.practicum.main_service.compilations.dto.NewCompilationDto;
 import ru.practicum.main_service.compilations.dto.UpdateCompilationRequest;

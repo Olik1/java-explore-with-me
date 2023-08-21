@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.main_service.event.model.State;
 import ru.practicum.main_service.request.model.ParticipationRequestStatus;
 
 import java.time.LocalDateTime;

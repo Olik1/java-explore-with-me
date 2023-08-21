@@ -1,13 +1,14 @@
 package ru.practicum.main_service.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.main_service.categories.dto.CategoryDto;
-import ru.practicum.main_service.event.model.Location;
 import ru.practicum.main_service.event.model.State;
 import ru.practicum.main_service.users.dto.UserDto;
 
-import javax.persistence.Transient;
 import java.time.LocalDateTime;
 @Data
 @Builder

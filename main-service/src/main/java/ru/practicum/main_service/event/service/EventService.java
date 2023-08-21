@@ -1,13 +1,11 @@
 package ru.practicum.main_service.event.service;
 
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.practicum.main_service.event.dto.*;
 import ru.practicum.main_service.event.model.SortEvents;
 import ru.practicum.main_service.event.model.State;
 import ru.practicum.main_service.request.dto.ParticipationRequestDto;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public interface EventService {
@@ -23,7 +21,7 @@ public interface EventService {
 
     EventFullDto getEventsByUserId(Long userId, Long eventId);
 
-    EventFullDto updateEventsByUser(Long userId, Long eventId, UpdateEventUserRequestDto requestDto);
+    EventFullDto updateEventsByUser(Long userId, Long eventId, UpdateEventRequestDto requestDto);
 
     List<ParticipationRequestDto> getRequestUserEvents(Long userId, Long eventId);
 
@@ -34,4 +32,5 @@ public interface EventService {
     List<EventFullDto> adminGetEvents(List<Long> userIds, List<State> states, List<Long> categories,
                                       String rangeStart, String rangeEnd, Integer from, Integer size);
 
+    EventFullDto adminUpdateEvent(Long eventId,  UpdateEventRequestDto requestDto);
 }
