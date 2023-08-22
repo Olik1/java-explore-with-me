@@ -14,7 +14,7 @@ public interface EventService {
                                   LocalDateTime rangeStart, LocalDateTime rangeEnd,
                                   Boolean onlyAvailable, SortEvents sort, Integer from, Integer size, HttpServletRequest request);
 
-    EventFullDto getEventById(Long eventId, String ip);
+    EventFullDto getEventById(Long eventId, HttpServletRequest request);
 
     List<EventFullDto> getAllEventsByUserId(Long userId, Integer from, Integer size);
 

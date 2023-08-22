@@ -110,14 +110,20 @@ public class EventServiceImpl implements EventService {
      * нужно сохранить в сервисе статистики
      */
     @Override
-    public EventFullDto getEventById(Long eventId, String ip) {
-        //TODO service statistic + count views
+    public EventFullDto getEventById(Long eventId, HttpServletRequest request) {
         Event event = eventRepository.findByIdAndAndState(eventId, State.PUBLISHED) //событие должно быть опубликовано
                 .orElseThrow(() -> new ObjectNotFoundException("Не найдено опубликованное событие"));
-        statsClient.saveHit("/events/" + eventId, ip);
+        String ip = request.getRemoteAddr();
+        String uri = request.getRequestURI();
+
         Long view = statsClient.getViewsByEventId(eventId);
+        EventFullDto eventFullDto = EventMapper.toEventFullDto(event);
+        statsClient.saveHit("/events/" + eventId, ip);
+        eventFullDto.setConfirmedRequests(requestRepository.countAllByEventIdAndStatus(event.getId(),
+                ParticipationRequestStatus.CONFIRMED));
+
         return EventMapper.toEventFullDto(event);
-    }
+}
 
     @Override
     public List<EventFullDto> getAllEventsByUserId(Long userId, Integer from, Integer size) {
