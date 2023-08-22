@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS event
     createdOn         TIMESTAMP WITHOUT TIME ZONE,
     publishedOn       TIMESTAMP WITHOUT TIME ZONE,
     initiator_id      BIGINT REFERENCES users (id) ON DELETE CASCADE,
-    categories_id     BIGINT REFERENCES categories (id) ON DELETE CASCADE,
+    category_id     BIGINT REFERENCES categories (id) ON DELETE CASCADE,
     location_id       BIGINT REFERENCES locations (id) ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS events_compilations

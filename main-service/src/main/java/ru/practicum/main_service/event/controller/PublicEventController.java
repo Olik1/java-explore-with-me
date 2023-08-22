@@ -9,6 +9,7 @@ import ru.practicum.main_service.event.dto.EventShortDto;
 import ru.practicum.main_service.event.model.SortEvents;
 import ru.practicum.main_service.event.service.EventService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,16 +26,16 @@ public class PublicEventController {
                                          @RequestParam(required = false) List<Long> categories,
                                          @RequestParam(required = false) Boolean paid,
                                          @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                          LocalDateTime rangeStart,
+                                         LocalDateTime rangeStart,
                                          @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                          LocalDateTime rangeEnd,
+                                         LocalDateTime rangeEnd,
                                          @RequestParam(required = false) Boolean onlyAvailable,
                                          @RequestParam(required = false) SortEvents sort,
                                          @RequestParam(required = false, defaultValue = "0")
-                                          @PositiveOrZero Integer from,
+                                         @PositiveOrZero Integer from,
                                          @RequestParam(required = false, defaultValue = "10")
-                                          @PositiveOrZero Integer size) {
-        return eventService.getEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
+                                         @PositiveOrZero Integer size, HttpServletRequest request) {
+        return eventService.getEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size, request);
     }
 
     @GetMapping("/{id}")

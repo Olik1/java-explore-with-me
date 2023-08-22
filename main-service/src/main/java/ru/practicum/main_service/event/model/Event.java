@@ -55,7 +55,7 @@ public class Event {
      * Краткое описание
      */
     @Column(nullable = false)
-    private Integer participantLimit;
+    private Long participantLimit;
     /**
      * Ограничение на количество участников
      */
@@ -91,10 +91,10 @@ public class Event {
      * Категория события
      */
     @ManyToOne
-    @JoinColumn(name = "categories_id", nullable = false)
-    private Categories categories;
+    @JoinColumn(name = "category_id", nullable = false)
+    private Categories category;
     @Transient
-    private Integer confirmedRequests;
+    private Long confirmedRequests;
     @Transient
     private Long views;
 }

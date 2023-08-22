@@ -6,9 +6,13 @@ import org.springframework.stereotype.Component;
 import ru.practicum.HitRequestDto;
 import ru.practicum.StatsResponseDto;
 import ru.practicum.client.StatsClient;
+import ru.practicum.main_service.event.dto.EventShortDto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -32,5 +36,34 @@ public class StatisticClient {
                 LocalDateTime.now(), List.of("/events/" + eventId), true);
         return !hitsList.isEmpty() ? hitsList.get(0).getHits() : 0L;
     }
+    public List<EventShortDto> setViewsNumber(List<EventShortDto> events) {
+        List<String> uris = new ArrayList<>();
+        for (EventShortDto eventShortDto : events) {
+            uris.add("/events/" + eventShortDto.getId());
+        }
 
+        EventShortDto eventss = new EventShortDto();
+        List<StatsResponseDto> hits = statsClient.getStatistic(LocalDateTime.now().minusYears(100),
+                LocalDateTime.now(), uris, true);
+        if (!hits.isEmpty()) {
+            Map<Long, Integer> hitMap = mapHits(hits);
+            for (EventShortDto event : events) {
+                event.setViews(hitMap.getOrDefault(event.getId(), 0));
+            }
+        } else {
+            for (EventShortDto event : events) {
+                event.setViews(0);
+            }
+        }
+        return events;
+    }
+    private Map<Long, Integer> mapHits(List<StatsResponseDto> hits) {
+        Map<Long, Integer> hitMap = new HashMap<>();
+        for (StatsResponseDto hit : hits) {
+            String hitUri = hit.getUri();
+            Long id = Long.valueOf(hitUri.substring(8));
+            hitMap.put(id, (int) hit.getHits());
+        }
+        return hitMap;
+    }
 }

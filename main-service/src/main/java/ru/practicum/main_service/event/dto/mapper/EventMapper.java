@@ -24,7 +24,7 @@ public class EventMapper {
     public static EventFullDto toEventFullDto(Event event) {
         return EventFullDto.builder()
                 .annotation(event.getAnnotation())
-                .categoryDto(CategoriesMapper.toCategoryDto(event.getCategories()))
+                .categoryDto(CategoriesMapper.toCategoryDto(event.getCategory()))
 //                .confirmedRequests(0)
                 .createdOn(event.getCreatedOn())
                 .description(event.getDescription())
@@ -52,10 +52,21 @@ public class EventMapper {
                 .build();
 
     }
+    public static EventShortDto mapToShortDto(Event event) {
+        return EventShortDto.builder()
+                .annotation(event.getAnnotation())
+                .category(CategoriesMapper.toCategoryDto(event.getCategory()))
+                .eventDate(event.getEventDate())
+                .id(event.getId())
+                .initiator(UserMapper.toUserDto(event.getInitiator()))
+                .paid(event.getPaid())
+                .title(event.getTitle())
+                .build();
+    }
     public static Event toEvent(NewEventDto newEventDto, Categories categories, Location location, User user) {
         return Event.builder()
                 .annotation(newEventDto.getAnnotation())
-                .categories(categories)
+                .category(categories)
                 .description(newEventDto.getDescription())
                 .eventDate(newEventDto.getEventDate())
                 .location(location)
@@ -70,7 +81,7 @@ public class EventMapper {
     public EventFullDto mapToFullDto(Event event) {
         EventFullDto dto = new EventFullDto();
         dto.setAnnotation(event.getAnnotation());
-        dto.setCategoryDto(CategoriesMapper.toCategoryDto(event.getCategories()));
+        dto.setCategoryDto(CategoriesMapper.toCategoryDto(event.getCategory()));
         dto.setCreatedOn(event.getCreatedOn());
         dto.setDescription(event.getDescription());
         dto.setEventDate(event.getEventDate());

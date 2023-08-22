@@ -27,10 +27,12 @@ import ru.practicum.main_service.request.model.Request;
 import ru.practicum.main_service.users.model.User;
 import ru.practicum.main_service.users.repository.UserRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,24 +61,44 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventShortDto> getEvents(String text, List<Long> categories, Boolean paid,
                                          LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                                         Boolean onlyAvailable, SortEvents sort, Integer from, Integer size) {
+                                         Boolean onlyAvailable, SortEvents sort, Integer from, Integer size,
+                                         HttpServletRequest request) {
 
-        //TODO service statistic + count views
+        if (rangeStart != null && rangeEnd != null) {
+            if (rangeStart.isAfter(rangeEnd)) {
+                throw new ValidationException(String.format("Дата начала %s позже даты завершения %s.", rangeStart, rangeEnd));
+            }
+        }
 
-        String lowerCase = text.toLowerCase();
-        PageRequest page;
-        List<Event> eventList;
-        if (sort.equals(SortEvents.EVENT_DATE)) {
-            page = PageRequest.of(from, size, Sort.by("eventDate"));
+        CriteriaPublic criteria = CriteriaPublic.builder()
+                .text(text)
+                .categories(categories)
+                .paid(paid)
+                .onlyAvailable(onlyAvailable)
+                .sort(sort)
+                .from(from)
+                .size(size)
+                .build();
+        String ip = request.getRemoteAddr();
+        String uri = request.getRequestURI();
+        List<Event> events = customBuiltEventRepository.findEventsPublic(criteria);
+
+        List<EventShortDto> result = events.stream().map(EventMapper::mapToShortDto).collect(Collectors.toList());
+        statsClient.setViewsNumber(result);
+        for (EventShortDto event : result) {
+            event.setConfirmedRequests(requestRepository.countAllByEventIdAndStatus(event.getId(),
+                    ParticipationRequestStatus.CONFIRMED));
+        }
+        statsClient.saveHit(uri, ip);
+
+        for (EventShortDto event : result) {
+            statsClient.saveHit("/events/" + event.getId(), ip);
+        }
+        if (criteria.getSort() == SortEvents.VIEWS) {
+            return result.stream().sorted(Comparator.comparingInt(EventShortDto::getViews)).collect(Collectors.toList());
         } else {
-            page = PageRequest.of(from, size);
+            return result.stream().sorted(Comparator.comparing(EventShortDto::getEventDate)).collect(Collectors.toList());
         }
-        eventList = eventRepository.findAll();
-        if (onlyAvailable.equals(true)) {
-//            eventsList = eventsRepository;
-        }
-
-        return null;
     }
 
 
@@ -181,7 +203,6 @@ public class EventServiceImpl implements EventService {
         User user = getUser(userId);
         Event event = getEvents(eventId);
 
-//        EventRequestStatusUpdateResult request = EventRequestStatusUpdateRequest.builder().build();
         if (!user.getId().equals(event.getInitiator().getId())) {
             throw new ConflictException("Пользователь не инициатор события!");
         }
@@ -293,7 +314,7 @@ public class EventServiceImpl implements EventService {
         }
         if (requestDto.getCategory() != null) {
             Categories categories = getCategoriesIfExist(requestDto.getCategory());
-            event.setCategories(categories);
+            event.setCategory(categories);
         }
         if (requestDto.getDescription() != null) {
             event.setDescription(requestDto.getDescription());

@@ -5,13 +5,14 @@ import ru.practicum.main_service.event.model.SortEvents;
 import ru.practicum.main_service.event.model.State;
 import ru.practicum.main_service.request.dto.ParticipationRequestDto;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventService {
     List<EventShortDto> getEvents(String text, List<Long> categories, Boolean paid,
                                   LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                                  Boolean onlyAvailable, SortEvents sort, Integer from, Integer size);
+                                  Boolean onlyAvailable, SortEvents sort, Integer from, Integer size, HttpServletRequest request);
 
     EventFullDto getEventById(Long eventId, String ip);
 

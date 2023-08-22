@@ -1,18 +1,17 @@
 package ru.practicum.main_service.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Value;
+import lombok.*;
 import ru.practicum.main_service.categories.dto.CategoryDto;
 import ru.practicum.main_service.users.dto.UserDto;
 
 import java.time.LocalDateTime;
+
+
 @Data
-@Value
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class EventShortDto {
 
     private Long id;
@@ -24,7 +23,7 @@ public class EventShortDto {
     /**
      * Количество одобренных заявок на участие в данном событии
      */
-    private Integer confirmedRequests;
+    private Long confirmedRequests;
 
     /**
      * Дата и время на которые намечено событие

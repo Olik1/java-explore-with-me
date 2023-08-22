@@ -28,7 +28,7 @@ public class UpdateEventRequestDto {
     private LocalDateTime eventDate;
     private LocationDto location;
     private Boolean paid;
-    private Integer participantLimit;
+    private Long participantLimit;
     private Boolean requestModeration;
     @Size(min = 3, max = 120)
     private String title;
