@@ -99,8 +99,8 @@ public class Event {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     private List<Request> participationRequests;
-//    @Transient
-//    private Long confirmedRequests;
-//    @Transient
-//    private Long views;
+    @Transient
+    private Long confirmedRequests;
+    @Transient
+    private Long views;
 }

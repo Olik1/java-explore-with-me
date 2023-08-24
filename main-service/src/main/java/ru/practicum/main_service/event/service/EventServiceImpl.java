@@ -17,6 +17,7 @@ import ru.practicum.main_service.event.model.SortEvents;
 import ru.practicum.main_service.event.model.State;
 import ru.practicum.main_service.event.repository.CustomBuiltEventRepository;
 import ru.practicum.main_service.event.repository.EventRepository;
+import ru.practicum.main_service.event.repository.LocationRepository;
 import ru.practicum.main_service.exception.ConflictException;
 import ru.practicum.main_service.exception.ObjectNotFoundException;
 import ru.practicum.main_service.request.RequestRepository;
@@ -46,18 +47,9 @@ public class EventServiceImpl implements EventService {
     private final CategoriesRepository categoriesRepository;
     private final RequestRepository requestRepository;
     private final CustomBuiltEventRepository customBuiltEventRepository;
+    private final LocationRepository locationRepository;
 
 
-    /**
-     * в выдаче должны быть только опубликованные события;
-     * текстовый поиск (по аннотации и подробному описанию) должен быть без учета регистра букв;
-     * если в запросе не указан диапазон дат [rangeStart-rangeEnd], то нужно выгружать события,
-     * которые произойдут позже текущей даты и времени;
-     * информация о каждом событии должна включать в себя количество просмотров и количество
-     * уже одобренных заявок на участие;
-     * информацию о том, что по этому эндпоинту был осуществлен и обработан запрос,
-     * нужно сохранить в сервисе статистики;
-     */
     @Override
     public List<EventShortDto> getEvents(String text, List<Long> categories, Boolean paid,
                                          LocalDateTime rangeStart, LocalDateTime rangeEnd,
@@ -101,14 +93,6 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-
-    /**
-     * событие должно быть опубликовано
-     * информация о событии должна включать в себя количество просмотров и
-     * количество подтвержденных запросов
-     * информацию о том, что по этому эндпоинту был осуществлен и обработан запрос,
-     * нужно сохранить в сервисе статистики
-     */
     @Override
     public EventFullDto getEventById(Long eventId, HttpServletRequest request) {
         Event event = eventRepository.findByIdAndAndState(eventId, State.PUBLISHED) //событие должно быть опубликовано
@@ -123,7 +107,7 @@ public class EventServiceImpl implements EventService {
                 ParticipationRequestStatus.CONFIRMED));
 
         return EventMapper.toEventFullDto(event);
-}
+    }
 
     @Override
     public List<EventFullDto> getAllEventsByUserId(Long userId, Integer from, Integer size) {
@@ -139,14 +123,16 @@ public class EventServiceImpl implements EventService {
         if (newEventDto.getRequestModeration() == null) {
             newEventDto.setRequestModeration(true);
         }
-        LocalDateTime time = newEventDto.getEventDate();
-        if (time.isBefore(LocalDateTime.now().plusHours(2))) {
+        LocalDateTime eventDate = newEventDto.getEventDate();
+        if (eventDate.isBefore(LocalDateTime.now().plusHours(2))) {
             throw new ConflictException("Cобытие не может быть раньше, чем через два часа от текущего момента!");
         }
         User user = getUser(userId);
         Location location = LocationMapper.toLocation(newEventDto.getLocation());
+        locationRepository.save(location);
         Categories categories = getCategoriesIfExist(newEventDto.getCategory());
         Event event = EventMapper.toEvent(newEventDto, categories, location, user);
+        event.setCreatedOn(LocalDateTime.now());
         Event result = eventRepository.save(event);
         return EventMapper.toEventFullDto(result);
     }
@@ -197,12 +183,6 @@ public class EventServiceImpl implements EventService {
         return requests.stream().map(RequestMapper::toRequestDto).collect(Collectors.toList());
     }
 
-    /*
-    если для события лимит заявок равен 0 или отключена пре-модерация заявок, то подтверждение заявок не требуется
-    нельзя подтвердить заявку, если уже достигнут лимит по заявкам на данное событие (Ожидается код ошибки 409)
-    статус можно изменить только у заявок, находящихся в состоянии ожидания (Ожидается код ошибки 409)
-    если при подтверждении данной заявки, лимит заявок для события исчерпан, то все неподтверждённые заявки необходимо отклонить
-     */
     @Override
     public EventRequestStatusUpdateResult updateStatusRequestByUserIdForEvents(Long userId, Long eventId,
                                                                                EventRequestStatusUpdateRequest requestStatusUpdate) {
@@ -312,7 +292,6 @@ public class EventServiceImpl implements EventService {
 
         return EventMapper.toEventFullDto(event);
     }
-
 
     private void updateEvents(Event event, UpdateEventRequestDto requestDto) {
         if (requestDto.getAnnotation() != null) {

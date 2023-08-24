@@ -37,6 +37,20 @@ public class EventMapper {
                 .requestModeration(event.getRequestModeration())
                 .state(event.getState())
                 .title(event.getTitle())
+                .location(LocationMapper.toLocationDto(event.getLocation()))
+                .build();
+    }
+    public static NewEventDto toNewEventDtoDto(Event event) {
+        return NewEventDto.builder()
+                .annotation(event.getAnnotation())
+                .category(event.getCategory().getId())
+                .description(event.getDescription())
+                .eventDate(event.getEventDate())
+                .location(LocationMapper.toLocationDto(event.getLocation()))
+                .paid(event.getPaid())
+                .participantLimit(event.getParticipantLimit())
+                .requestModeration(event.getRequestModeration())
+                .title(event.getTitle())
                 .build();
     }
     public static EventShortDto toEventShortDto(Event event, CategoryDto categoryDto, UserDto userDto) {
