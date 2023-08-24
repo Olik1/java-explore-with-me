@@ -5,10 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.main_service.categories.model.Categories;
+import ru.practicum.main_service.request.model.Request;
 import ru.practicum.main_service.users.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -93,8 +95,12 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Categories category;
-    @Transient
-    private Long confirmedRequests;
-    @Transient
-    private Long views;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_id")
+    private List<Request> participationRequests;
+//    @Transient
+//    private Long confirmedRequests;
+//    @Transient
+//    private Long views;
 }

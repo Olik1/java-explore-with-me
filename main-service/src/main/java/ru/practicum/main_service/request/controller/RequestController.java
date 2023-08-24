@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/users/{userId}/requests")
 public class RequestController {
-    RequestService requestsService;
+    private final RequestService requestsService;
 
     @GetMapping
     public List<ParticipationRequestDto> getRequest(@RequestParam Long userId) {

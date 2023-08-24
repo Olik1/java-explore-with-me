@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/compilations")
 public class PublicCompilationsController {
     private final CompilationService compilationsService;
-
+    //checked without events
     @GetMapping
     public List<CompilationDto> getAllCompilations(@RequestParam(required = false) Boolean pinned,
                                                    @RequestParam(required = false, defaultValue = "0")
@@ -24,6 +24,7 @@ public class PublicCompilationsController {
                                                          @PositiveOrZero Integer size) {
         return compilationsService.getAllCompilations(pinned, from, size);
     }
+    //checked without events
     @GetMapping("/{compId}")
     public CompilationDto getCompilationsById(@PathVariable Long compId) {
         return compilationsService.getCompilationsById(compId);

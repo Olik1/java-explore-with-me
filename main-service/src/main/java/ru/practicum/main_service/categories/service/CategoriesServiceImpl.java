@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CategoriesServiceImpl implements CategoriesService {
-    private CategoriesRepository categoriesRepository;
+    private final CategoriesRepository categoriesRepository;
 
     @Override
     public List<CategoryDto> getCategories(Integer from, Integer size) {

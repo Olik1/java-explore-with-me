@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class CompilationServiceImpl implements CompilationService {
-    private CompilationRepository compilationsRepository;
-    private EventRepository eventRepository;
+    private final CompilationRepository compilationsRepository;
+    private final EventRepository eventRepository;
 
     @Override
     public List<CompilationDto> getAllCompilations(Boolean pinned, Integer from, Integer size) {
@@ -55,7 +55,10 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
-        List<Event> events = eventRepository.findAllById(newCompilationDto.getEvents());
+        List<Event> events = new ArrayList<>();
+        if (newCompilationDto.getEvents() != null) {
+            events = eventRepository.findAllById(newCompilationDto.getEvents());
+        }
         Compilation compilation = CompilationMapper.toCompilation(newCompilationDto, events);
         Compilation result = compilationsRepository.save(compilation);
         log.info("Запрос POST на добавление новой подборки c id: {}", compilation.getId());
@@ -84,7 +87,11 @@ public class CompilationServiceImpl implements CompilationService {
             compilation.setTitle(request.getTitle());
         }
         Compilation result = compilationsRepository.save(compilation);
-        List<Event> events = eventRepository.findAllById(request.getEvents());
+
+        List<Event> events = new ArrayList<>();
+        if (request.getEvents() != null) {
+            events = eventRepository.findAllById(request.getEvents());
+        }
         log.info("Запрос PATH на изменение подборки событий по id: {}", compId);
 
         return CompilationMapper.toCompilationDto(result, maptoDto(events));

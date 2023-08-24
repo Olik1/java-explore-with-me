@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/admin/users")
 public class AdminUserController {
     private final UserService userService;
-
+//checked
     @GetMapping
     public List<UserDto> getUsers(@RequestParam(required = false) List<Long> ids,
                                   @RequestParam(required = false, defaultValue = "0")
@@ -27,13 +27,13 @@ public class AdminUserController {
                                   @PositiveOrZero Integer size) {
         return userService.getUsers(ids, from, size);
     }
-
+//checked
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(@RequestBody @Valid NewUserRequestDto userRequestDto) {
         return userService.createUser(userRequestDto);
     }
-
+//checked
     @DeleteMapping
     @RequestMapping("/{userId}")
     public void deleteUser(@PathVariable Long userId) {

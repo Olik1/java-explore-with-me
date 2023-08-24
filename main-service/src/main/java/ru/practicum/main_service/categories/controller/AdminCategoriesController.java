@@ -15,17 +15,24 @@ import javax.validation.Valid;
 @RequestMapping("/admin/categories")
 public class AdminCategoriesController {
     private final CategoriesService categoriesService;
+
+    //checked
     @PostMapping
     public CategoryDto createCategories(@RequestBody @Valid NewCategoryDto newCategoryDto) {
         return categoriesService.createCategories(newCategoryDto);
     }
+    //checked
     @DeleteMapping("/{catId}")
-    public void deleteCategories (@PathVariable Long catId) {
+    public void deleteCategories(@PathVariable Long catId) {
         categoriesService.deleteCategories(catId);
     }
-    @PatchMapping ("/{catId}")
-    public CategoryDto updateCategories(@RequestBody CategoryDto categoryDto) {
-        return categoriesService.updateCategories(categoryDto);
+    //checked
+    @PatchMapping("/{catId}")
+    public CategoryDto updateCategories(@PathVariable Long catId,
+                                        @RequestBody CategoryDto categoryDto) {
+        categoryDto.setId(catId);
+        var s = categoriesService.updateCategories(categoryDto);
+        return s;
     }
 
 }

@@ -7,19 +7,20 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+
 @Data
+@Entity
+@Table(name = "locations")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "locations")
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "location_id")
-    private Long id;
+    //@Column(name = "location_id")
+    private long id;
 
-    private Float lat;
+    private float lat;
 
-    private Float lon;
+    private float lon;
 }
