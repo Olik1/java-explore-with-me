@@ -30,6 +30,7 @@ public class AdminEventController {
 
         return eventService.adminGetEvents(users, states, categories, rangeStart, rangeEnd, from, size);
     }
+    //checked without request
     @PatchMapping("/{eventId}")
     public EventFullDto patchAdminEvent(@PathVariable @Min(1) Long eventId,
                                    @RequestBody @Validated UpdateEventRequestDto requestDto) {

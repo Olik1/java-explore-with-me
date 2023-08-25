@@ -23,7 +23,7 @@ public class UpdateEventRequestDto {
     @Size(min = 20, max = 7000)
     private String description;
     @NotNull
-    @FutureOrPresent
+//    @FutureOrPresent
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
     private LocationDto location;

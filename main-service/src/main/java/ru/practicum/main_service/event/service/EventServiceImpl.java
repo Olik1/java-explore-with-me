@@ -271,24 +271,27 @@ public class EventServiceImpl implements EventService {
     public EventFullDto adminUpdateEvent(Long eventId, UpdateEventRequestDto requestDto) {
         Event event = getEvents(eventId);
 
-        if (requestDto.getEventDate().isBefore(event.getPublishedOn().plusHours(1))) {
+        if (event.getPublishedOn() != null && requestDto.getEventDate().isBefore(event.getPublishedOn().plusHours(1))) {
             throw new ValidationException("дата начала изменяемого события должна быть не ранее чем за час от даты публикации");
         }
         switch (requestDto.getStateAction()) {
             case PUBLISH_EVENT:
                 if (event.getState() != State.PENDING) {
-                    throw new ConflictException("Event state must be pending");
+                    throw new ConflictException("Состояние события должно быть PENDING");
                 }
+                event.setState(State.PUBLISHED);
+                event.setPublishedOn(LocalDateTime.now());
                 break;
             case REJECT_EVENT:
                 if (event.getState() == State.PUBLISHED) {
-                    throw new ConflictException("Can't reject published event");
+                    throw new ConflictException("Невозможно отменить опубликованное мероприятие");
                 }
+                event.setState(State.CANCELED);
                 break;
             case SEND_TO_REVIEW:
             case CANCEL_REVIEW:
                 if (event.getState() == State.PUBLISHED) {
-                    throw new ConflictException("Event state must be pending or canceled");
+                    throw new ConflictException("Состояние события должно быть на ожидании или отмененным");
                 }
                 break;
         }
@@ -332,16 +335,9 @@ public class EventServiceImpl implements EventService {
             event.setTitle(requestDto.getTitle());
         }
 
+
     }
 
-    //    private Location getLocation(LocationDto locationDto) {
-//        Location savedLocation = locationRepository.findByLatAndLon(locationDto.getLat(), locationDto.getLon()).orElseGet(() -> {
-//            log.warn("Локация {} не найдена.", locationDto);
-//            return locationRepository.save(new Location(locationDto.getLat(), locationDto.getLon()));
-//        });
-//        log.info("Saved location: {}.", savedLocation);
-//        return savedLocation;
-//    }
     private Location getLocation(LocationDto locationDto) {
         Optional<Location> location = locationRepository.findByLatAndLon(locationDto.getLat(), locationDto.getLon());
 

@@ -41,7 +41,7 @@ public class PrivateEventController {
                                           @PathVariable Long eventId) {
         return eventService.getEventsByUserId(userId, eventId);
     }
-
+    //checked without requests
     @PatchMapping("/{eventId}")
     public EventFullDto updateEventsByUser(@PathVariable Long userId,
                                            @PathVariable Long eventId,
