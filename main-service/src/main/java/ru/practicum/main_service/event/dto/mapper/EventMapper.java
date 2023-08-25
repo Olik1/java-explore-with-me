@@ -21,11 +21,11 @@ import java.util.List;
 @UtilityClass
 public class EventMapper {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     public static EventFullDto toEventFullDto(Event event) {
-        return EventFullDto.builder()
+        EventFullDto eventFullDto = EventFullDto.builder()
                 .annotation(event.getAnnotation())
                 .categoryDto(CategoriesMapper.toCategoryDto(event.getCategory()))
-//                .confirmedRequests(0)
                 .createdOn(event.getCreatedOn())
                 .description(event.getDescription())
                 .eventDate(event.getEventDate())
@@ -39,7 +39,14 @@ public class EventMapper {
                 .title(event.getTitle())
                 .location(LocationMapper.toLocationDto(event.getLocation()))
                 .build();
+        if (event.getParticipationRequests() != null && !event.getParticipationRequests().isEmpty()) {
+            eventFullDto.setConfirmedRequests(event.getParticipationRequests().stream()
+                    .filter(participationRequest -> false)
+                    .count());
+        } else eventFullDto.setConfirmedRequests(0L);
+        return eventFullDto;
     }
+
     public static NewEventDto toNewEventDtoDto(Event event) {
         return NewEventDto.builder()
                 .annotation(event.getAnnotation())
@@ -53,6 +60,7 @@ public class EventMapper {
                 .title(event.getTitle())
                 .build();
     }
+
     public static EventShortDto toEventShortDto(Event event, CategoryDto categoryDto, UserDto userDto) {
         return EventShortDto.builder()
                 .id(event.getId())
@@ -66,6 +74,7 @@ public class EventMapper {
                 .build();
 
     }
+
     public static EventShortDto mapToShortDto(Event event) {
         return EventShortDto.builder()
                 .annotation(event.getAnnotation())
@@ -77,6 +86,7 @@ public class EventMapper {
                 .title(event.getTitle())
                 .build();
     }
+
     public static Event toEvent(NewEventDto newEventDto, Categories categories, Location location, User user) {
         return Event.builder()
                 .annotation(newEventDto.getAnnotation())
@@ -92,6 +102,7 @@ public class EventMapper {
                 .state(State.PENDING)
                 .build();
     }
+
     public EventFullDto mapToFullDto(Event event) {
         EventFullDto dto = new EventFullDto();
         dto.setAnnotation(event.getAnnotation());
@@ -112,6 +123,7 @@ public class EventMapper {
         dto.setViews(event.getViews());
         return dto;
     }
+
     public List<EventFullDto> mapToFullDto(Iterable<Event> events) {
         List<EventFullDto> result = new ArrayList<>();
         for (Event event : events) {

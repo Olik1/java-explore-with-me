@@ -20,7 +20,11 @@ public class Location {
     //@Column(name = "location_id")
     private long id;
 
-    private float lat;
+    private Float lat;
 
-    private float lon;
+    private Float lon;
+    public Location(Float lat, Float lon) {
+        this.lat = lat;
+        this.lon = lon;
+    }
 }

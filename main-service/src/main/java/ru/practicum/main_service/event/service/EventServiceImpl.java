@@ -35,6 +35,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -128,7 +129,8 @@ public class EventServiceImpl implements EventService {
             throw new ConflictException("Cобытие не может быть раньше, чем через два часа от текущего момента!");
         }
         User user = getUser(userId);
-        Location location = LocationMapper.toLocation(newEventDto.getLocation());
+        Location location = getLocation(newEventDto.getLocation());
+//        Location location = LocationMapper.toLocation(newEventDto.getLocation());
         locationRepository.save(location);
         Categories categories = getCategoriesIfExist(newEventDto.getCategory());
         Event event = EventMapper.toEvent(newEventDto, categories, location, user);
@@ -148,7 +150,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto updateEventsByUser(Long userId, Long eventId, UpdateEventRequestDto requestDto) {
         Event event = getEvents(eventId);
-        if (event.getState().equals(State.PENDING)) {
+        if (event.getState().equals(State.PUBLISHED)) {
             throw new ConflictException("Изменить можно только отмененные события или события в состоянии ожидания модерации!");
         }
         updateEvents(event, requestDto);
@@ -162,9 +164,12 @@ public class EventServiceImpl implements EventService {
                     event.setPublishedOn(LocalDateTime.now());
             }
         }
-        Event result = eventRepository.save(event);
-
-        return EventMapper.toEventFullDto(result);
+        Event toUpdate = eventRepository.save(event);
+        EventFullDto eventFullDto = EventMapper.toEventFullDto(toUpdate);
+        eventFullDto.setConfirmedRequests(requestRepository.countAllByEventIdAndStatus(event.getId(),
+                ParticipationRequestStatus.CONFIRMED));
+        statsClient.setViewsNumber(eventFullDto);
+        return eventFullDto;
     }
 
     @Override
@@ -289,8 +294,11 @@ public class EventServiceImpl implements EventService {
         }
         updateEvents(event, requestDto);
         Event toUpdate = eventRepository.save(event);
-
-        return EventMapper.toEventFullDto(event);
+        EventFullDto eventFullDto = EventMapper.toEventFullDto(toUpdate);
+        eventFullDto.setConfirmedRequests(requestRepository.countAllByEventIdAndStatus(event.getId(),
+                ParticipationRequestStatus.CONFIRMED));
+        statsClient.setViewsNumber(eventFullDto);
+        return eventFullDto;
     }
 
     private void updateEvents(Event event, UpdateEventRequestDto requestDto) {
@@ -307,25 +315,50 @@ public class EventServiceImpl implements EventService {
         if (requestDto.getEventDate() != null) {
             event.setEventDate(requestDto.getEventDate());
         }
-        if (event.getLocation() != null) {
-            event.setLocation(LocationMapper.toLocation(requestDto.getLocation()));
+        if (requestDto.getLocation() != null) {
+            Location location = getLocation(requestDto.getLocation());
+            event.setLocation(location);
         }
-        if (event.getPaid() != null) {
+        if (requestDto.getPaid() != null) {
             event.setPaid(requestDto.getPaid());
         }
-        if (event.getParticipantLimit() != null) {
+        if (requestDto.getParticipantLimit() != null) {
             event.setParticipantLimit(requestDto.getParticipantLimit());
         }
-        if (event.getRequestModeration() != null) {
+        if (requestDto.getRequestModeration() != null) {
             event.setRequestModeration(requestDto.getRequestModeration());
         }
-        if (event.getTitle() != null) {
+        if (requestDto.getTitle() != null) {
             event.setTitle(requestDto.getTitle());
         }
-        if (event.getTitle() != null) {
-            event.setTitle(requestDto.getTitle());
-        }
+
     }
+
+    //    private Location getLocation(LocationDto locationDto) {
+//        Location savedLocation = locationRepository.findByLatAndLon(locationDto.getLat(), locationDto.getLon()).orElseGet(() -> {
+//            log.warn("Локация {} не найдена.", locationDto);
+//            return locationRepository.save(new Location(locationDto.getLat(), locationDto.getLon()));
+//        });
+//        log.info("Saved location: {}.", savedLocation);
+//        return savedLocation;
+//    }
+    private Location getLocation(LocationDto locationDto) {
+        Optional<Location> location = locationRepository.findByLatAndLon(locationDto.getLat(), locationDto.getLon());
+
+        Location savedLocation;
+        if (location.isPresent()) {
+            savedLocation = location.get();
+            //Если список не пустой, просто берем первый элемент списка как сохраненную локацию
+            log.info("Локация уже существует: {}.", savedLocation);
+        } else {
+            //локация с указанной lat и lon не существует, сохраняем новую локацию в бд
+            savedLocation = locationRepository.save(new Location(locationDto.getLat(), locationDto.getLon()));
+            log.info("Сохранение локации: {}.", savedLocation);
+        }
+
+        return savedLocation;
+    }
+
 
     private User getUser(Long userId) {
         return userRepository.findById(userId)

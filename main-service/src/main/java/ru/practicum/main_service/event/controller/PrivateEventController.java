@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/users/{userId}/events")
 public class PrivateEventController {
     private final EventService eventService;
-
+//checked without requests
     @GetMapping
     public List<EventFullDto> getAllEventsByUserId(@PathVariable Long userId,
                                                    @RequestParam(required = false, defaultValue = "0")
@@ -28,14 +28,14 @@ public class PrivateEventController {
 
         return eventService.getAllEventsByUserId(userId, from, size);
     }
-
+//checked without requests
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto createEvents(@PathVariable Long userId,
                                      @RequestBody @Valid NewEventDto newEventDto) {
         return eventService.createEvents(userId, newEventDto);
     }
-
+    //checked without requests
     @GetMapping("/{eventId}")
     public EventFullDto getEventsByUserId(@PathVariable Long userId,
                                           @PathVariable Long eventId) {

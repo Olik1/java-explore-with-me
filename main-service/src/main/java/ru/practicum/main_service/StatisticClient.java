@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.HitRequestDto;
 import ru.practicum.StatsResponseDto;
 import ru.practicum.client.StatsClient;
+import ru.practicum.main_service.event.dto.EventFullDto;
 import ru.practicum.main_service.event.dto.EventShortDto;
 
 import java.time.LocalDateTime;
@@ -35,6 +36,16 @@ public class StatisticClient {
         List<StatsResponseDto> hitsList = statsClient.getStatistic(LocalDateTime.now().minusDays(30),
                 LocalDateTime.now(), List.of("/events/" + eventId), true);
         return !hitsList.isEmpty() ? hitsList.get(0).getHits() : 0L;
+    }
+    public EventFullDto setViewsNumber(EventFullDto event) {
+        List<StatsResponseDto> hits = statsClient.getStatistic(event.getCreatedOn(), LocalDateTime.now(),
+                List.of("/events/" + event.getId()), true);
+        if (!hits.isEmpty()) {
+            event.setViews(hits.get(0).getHits());
+        } else {
+            event.setViews(0L);
+        }
+        return event;
     }
     public List<EventShortDto> setViewsNumber(List<EventShortDto> events) {
         List<String> uris = new ArrayList<>();
