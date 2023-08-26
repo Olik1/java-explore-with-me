@@ -49,7 +49,6 @@ public class StatisticClient {
             uris.add("/events/" + eventShortDto.getId());
         }
 
-        EventShortDto eventss = new EventShortDto();
         List<StatsResponseDto> hits = statsClient.getStatistic(LocalDateTime.now().minusYears(100),
                 LocalDateTime.now(), uris, true);
         if (!hits.isEmpty()) {
