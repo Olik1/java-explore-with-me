@@ -55,7 +55,7 @@ public class RequestServiceImpl implements RequestService {
         if (!event.getState().equals(State.PUBLISHED)) {
             throw new ConflictException("нельзя участвовать в неопубликованном событии!");
         }
-        if ( event.getParticipantLimit() != 0 && event.getParticipantLimit() <= confirmedRequestAmount) {
+        if (event.getParticipantLimit() != 0 && event.getParticipantLimit() <= confirmedRequestAmount) {
             throw new ConflictException("достигнут лимит запросов на участие!");
         }
         if (requestsRepository.existsRequestByRequester_IdAndEvent_Id(userId, eventId)) {
@@ -81,7 +81,7 @@ public class RequestServiceImpl implements RequestService {
     public ParticipationRequestDto cancelRequest(Long userId, Long requestId) {
         getUserById(userId);
         Request request = getRequestById(requestId);
-        if(!userId.equals(request.getRequester().getId())) {
+        if (!userId.equals(request.getRequester().getId())) {
             throw new ConflictException("Можно отменить только свой запрос на участие!");
         }
         request.setStatus(ParticipationRequestStatus.CANCELED);
@@ -99,6 +99,7 @@ public class RequestServiceImpl implements RequestService {
         return eventRepository.findById(eventId).orElseThrow(
                 () -> new ObjectNotFoundException("Не найдено мероприятие по id!"));
     }
+
     public Request getRequestById(Long requestId) {
         return requestsRepository.findById(requestId).orElseThrow(
                 () -> new ObjectNotFoundException("Не найден запрос по id!"));

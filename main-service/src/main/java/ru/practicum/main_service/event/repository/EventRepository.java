@@ -2,7 +2,6 @@ package ru.practicum.main_service.event.repository;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import ru.practicum.main_service.event.model.Event;
 import ru.practicum.main_service.event.model.State;
 

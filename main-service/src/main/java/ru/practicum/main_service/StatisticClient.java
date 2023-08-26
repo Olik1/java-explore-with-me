@@ -20,7 +20,7 @@ import java.util.Map;
 public class StatisticClient {
 
     private final StatsClient statsClient;
-    private final static String APP = "main-service";
+    private static final String APP = "main-service";
 
     public ResponseEntity<Object> saveHit(String uri, String ip) {
         HitRequestDto hitRequestDto = HitRequestDto.builder()

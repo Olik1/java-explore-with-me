@@ -11,6 +11,7 @@ public class CategoriesMapper {
                 .name(categories.getName())
                 .build();
     }
+
     public static Categories toCategories(NewCategoryDto newCategoryDto) {
         return Categories.builder()
                 .name(newCategoryDto.getName())

@@ -24,6 +24,7 @@ public class RequestController {
     public ParticipationRequestDto createRequest(@PathVariable Long userId, @RequestParam Long eventId) {
         return requestsService.createRequest(userId, eventId);
     }
+
     @PatchMapping("/{requestId}/cancel")
     public ParticipationRequestDto cancelRequest(@PathVariable Long userId, @PathVariable Long requestId) {
         return requestsService.cancelRequest(userId, requestId);

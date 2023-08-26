@@ -6,6 +6,7 @@ import ru.practicum.main_service.event.model.SortEvents;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Data
 @Builder
 public class CriteriaPublic {

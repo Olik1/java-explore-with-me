@@ -22,11 +22,13 @@ public class AdminCategoriesController {
     public CategoryDto createCategories(@RequestBody @Valid NewCategoryDto newCategoryDto) {
         return categoriesService.createCategories(newCategoryDto);
     }
+
     @DeleteMapping("/{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategories(@PathVariable Long catId) {
         categoriesService.deleteCategories(catId);
     }
+
     @PatchMapping("/{catId}")
     @ResponseStatus(HttpStatus.OK)
     public CategoryDto updateCategories(@PathVariable Long catId,

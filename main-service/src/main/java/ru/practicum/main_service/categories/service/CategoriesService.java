@@ -11,7 +11,9 @@ public interface CategoriesService {
     CategoryDto getCategoriesId(Long catId);
 
     CategoryDto createCategories(NewCategoryDto newCategoryDto);
-    void deleteCategories (Long catId);
+
+    void deleteCategories(Long catId);
+
     CategoryDto updateCategories(CategoryDto categoryDto);
 
 }

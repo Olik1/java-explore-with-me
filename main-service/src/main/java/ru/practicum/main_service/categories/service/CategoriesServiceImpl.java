@@ -41,7 +41,7 @@ public class CategoriesServiceImpl implements CategoriesService {
 
     @Override
     public CategoryDto createCategories(NewCategoryDto newCategoryDto) {
-        if (categoriesRepository.existsCategoriesByName(newCategoryDto.getName())){
+        if (categoriesRepository.existsCategoriesByName(newCategoryDto.getName())) {
             throw new ConflictException("Такая категория уже есть");
         }
         Categories categories = categoriesRepository.save(CategoriesMapper.toCategories(newCategoryDto));
@@ -55,12 +55,12 @@ public class CategoriesServiceImpl implements CategoriesService {
 
         var category = categoriesRepository.findById(catId);
 
-        if (category == null){
-          throw  new ObjectNotFoundException("Не найдена выбранная категория");
+        if (category == null) {
+            throw new ObjectNotFoundException("Не найдена выбранная категория");
         }
 
         if (eventRepository.existsEventsByCategory_Id(catId)) {
-             throw new ConflictException("Такой пользователь уже есть");
+            throw new ConflictException("Такой пользователь уже есть");
         }
         categoriesRepository.deleteById(catId);
         log.info("Запрос DELETE на удаление категории: c id: {}", catId);
@@ -72,7 +72,7 @@ public class CategoriesServiceImpl implements CategoriesService {
 
         Categories categories = getCategoriesIfExist(categoryDto.getId());
 
-        if (categoriesRepository.existsCategoriesByNameAndIdNot(categoryDto.getName(),categoryDto.getId())){
+        if (categoriesRepository.existsCategoriesByNameAndIdNot(categoryDto.getName(), categoryDto.getId())) {
             throw new ConflictException("Такая категория уже есть");
         }
 

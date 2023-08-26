@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import ru.practicum.main_service.event.model.StateAction;
 
 import javax.validation.constraints.FutureOrPresent;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 

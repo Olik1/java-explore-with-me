@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(NewUserRequestDto userRequestDto) {
-        if(userRepository.existsUserByName(userRequestDto.getName())){
+        if (userRepository.existsUserByName(userRequestDto.getName())) {
             throw new ConflictException("Такой пользователь уже есть");
         }
         User user = UserMapper.toUser(userRequestDto);
@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService {
         log.info("Запрос DELETE на удаление пользователя: c id: {}", userId);
         userRepository.deleteById(userId);
     }
+
     public boolean isUserExists(Long userId) {
         var userOptional = userRepository.findById(userId);
         return !userOptional.isEmpty();

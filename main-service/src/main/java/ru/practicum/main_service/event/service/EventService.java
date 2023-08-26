@@ -33,5 +33,5 @@ public interface EventService {
     List<EventFullDto> adminGetEvents(List<Long> userIds, List<State> states, List<Long> categories,
                                       String rangeStart, String rangeEnd, Integer from, Integer size);
 
-    EventFullDto adminUpdateEvent(Long eventId,  UpdateEventRequestDto requestDto);
+    EventFullDto adminUpdateEvent(Long eventId, UpdateEventRequestDto requestDto);
 }
