@@ -285,7 +285,7 @@ public class EventServiceImpl implements EventService {
         List<Event> events = customBuiltEventRepository.getEvents(criteria);
         var result = events.stream().map(EventMapper::toEventFullDto)
                 .map(statsClient::setViewsNumber).collect(Collectors.toList());
-        log.info("Событие: {}.", events);
+        //log.info("Событие: {}.", events);
 //        return EventMapper.mapToFullDto(events);
         return result;
     }
