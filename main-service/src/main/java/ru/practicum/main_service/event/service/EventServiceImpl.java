@@ -150,7 +150,6 @@ public class EventServiceImpl implements EventService {
     public EventFullDto getEventsByUserId(Long userId, Long eventId) {
         Event event = eventRepository.findByInitiatorIdAndId(userId, eventId).orElseThrow(
                 () -> new ObjectNotFoundException("событие не найдено у пользователя!"));
-
         return EventMapper.toEventFullDto(event);
     }
 
