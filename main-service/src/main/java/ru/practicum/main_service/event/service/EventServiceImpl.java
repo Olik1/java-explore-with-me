@@ -109,15 +109,13 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findByIdAndAndState(eventId, State.PUBLISHED) //событие должно быть опубликовано
                 .orElseThrow(() -> new ObjectNotFoundException("Не найдено опубликованное событие"));
         String ip = request.getRemoteAddr();
-        String uri = request.getRequestURI();
-
-        Long view = statsClient.getViewsByEventId(eventId);
         EventFullDto eventFullDto = EventMapper.toEventFullDto(event);
         statsClient.saveHit("/events/" + eventId, ip);
+        statsClient.setViewsNumber(eventFullDto);
         eventFullDto.setConfirmedRequests(requestRepository.countAllByEventIdAndStatus(event.getId(),
                 ParticipationRequestStatus.CONFIRMED));
 
-        return EventMapper.toEventFullDto(event);
+        return eventFullDto;
     }
 
     @Override

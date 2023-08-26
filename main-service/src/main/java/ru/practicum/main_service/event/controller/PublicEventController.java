@@ -55,11 +55,11 @@ public class PublicEventController {
 
         return eventService.getEvents(text, categories, paid, start, end, onlyAvailable, sort, from, size, request);
     }
-
+    //checked without views - не считаются просмотры
     @GetMapping("/{id}")
-    public EventFullDto getEventById(@PathVariable(name = "id") Long eventId, HttpServletRequest request) {
+    public EventFullDto getEventById(@PathVariable Long id, HttpServletRequest request) {
 
-        return eventService.getEventById(eventId, request);
+        return eventService.getEventById(id, request);
     }
 
 }
