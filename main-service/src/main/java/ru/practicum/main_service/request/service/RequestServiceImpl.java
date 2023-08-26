@@ -47,7 +47,8 @@ public class RequestServiceImpl implements RequestService {
     public ParticipationRequestDto createRequest(Long userId, Long eventId) {
         User user = getUserById(userId);
         Event event = getEventsById(eventId);
-        Long limit = eventRepository.findCountedRequestsByEventIdAndConfirmedStatus(eventId);
+       // Long limit = eventRepository.findCountedRequestsByEventIdAndConfirmedStatus(eventId);
+        Long confirmedRequestAmount = requestsRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         // выбирает из Request, где поле `event.id` равно заданному `eventId` и поле `status` равно "CONFIRMED"
         if (user.getId().equals(event.getInitiator().getId())) {
             throw new ConflictException("инициатор события не может добавить запрос на участие в своём событии");
@@ -55,7 +56,7 @@ public class RequestServiceImpl implements RequestService {
         if (!event.getState().equals(State.PUBLISHED)) {
             throw new ConflictException("нельзя участвовать в неопубликованном событии!");
         }
-        if (event.getParticipantLimit() >= limit) {
+        if ( event.getParticipantLimit() != 0 && event.getParticipantLimit() <= confirmedRequestAmount) {
             throw new ConflictException("достигнут лимит запросов на участие!");
         }
         Request request = Request.builder()
@@ -63,7 +64,7 @@ public class RequestServiceImpl implements RequestService {
                 .event(event)
                 .created(LocalDateTime.now())
                 .build();
-        if (!event.getRequestModeration() && limit == 0) { // нужна ли модерация на участие
+        if (!event.getRequestModeration() || event.getParticipantLimit() == 0) { // нужна ли модерация на участие
             request.setStatus(ParticipationRequestStatus.CONFIRMED);
         } else {
             request.setStatus(ParticipationRequestStatus.PENDING);

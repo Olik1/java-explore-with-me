@@ -78,7 +78,7 @@ public class EventServiceImpl implements EventService {
 
         List<EventShortDto> result = events.stream().map(EventMapper::mapToShortDto).collect(Collectors.toList());
 
-        if(result.size() > 0 ){
+        if (result.size() > 0) {
             statsClient.setViewsNumber(result);
 
             for (EventShortDto event : result) {
@@ -89,13 +89,13 @@ public class EventServiceImpl implements EventService {
 
         statsClient.saveHit(uri, ip);
 
-       if (result.size() > 0){
-           for (EventShortDto event : result) {
-               statsClient.saveHit("/events/" + event.getId(), ip);
-           }
-       }else {
-           return new ArrayList<EventShortDto>();
-       }
+        if (result.size() > 0) {
+            for (EventShortDto event : result) {
+                statsClient.saveHit("/events/" + event.getId(), ip);
+            }
+        } else {
+            return new ArrayList<EventShortDto>();
+        }
         if (criteria.getSort() == SortEvents.VIEWS) {
             return result.stream().sorted(Comparator.comparingInt(EventShortDto::getViews)).collect(Collectors.toList());
         }
@@ -142,6 +142,8 @@ public class EventServiceImpl implements EventService {
         locationRepository.save(location);
         Categories categories = getCategoriesIfExist(newEventDto.getCategory());
         Event event = EventMapper.toEvent(newEventDto, categories, location, user);
+        event.setConfirmedRequests(0L);
+        event.setViews(0L);
         event.setCreatedOn(LocalDateTime.now());
         Event result = eventRepository.save(event);
         return EventMapper.toEventFullDto(result);
@@ -157,20 +159,23 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto updateEventsByUser(Long userId, Long eventId, UpdateEventRequestDto requestDto) {
+
         Event event = getEvents(eventId);
         if (event.getState().equals(State.PUBLISHED)) {
             throw new ConflictException("Изменить можно только отмененные события или события в состоянии ожидания модерации!");
         }
         updateEvents(event, requestDto);
-        if (requestDto != null) {
-            switch (requestDto.getStateAction()) {
-                case CANCEL_REVIEW:
-                    event.setState(State.CANCELED);
-                    break;
-                case SEND_TO_REVIEW:
-                    event.setState(State.PENDING);
-                    event.setPublishedOn(LocalDateTime.now());
-            }
+
+        if(requestDto.getStateAction() != null) {
+
+        switch (requestDto.getStateAction()) {
+            case CANCEL_REVIEW:
+                event.setState(State.CANCELED);
+                break;
+            case SEND_TO_REVIEW:
+                event.setState(State.PENDING);
+                event.setPublishedOn(LocalDateTime.now());
+        }
         }
         Event toUpdate = eventRepository.save(event);
         EventFullDto eventFullDto = EventMapper.toEventFullDto(toUpdate);
@@ -208,9 +213,10 @@ public class EventServiceImpl implements EventService {
         if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
             throw new ConflictException("Не требуется модерация и подтверждения заявок");
         }
-        if (!event.getState().equals(State.PENDING)) {
-            throw new ConflictException("Статус можно изменить только у заявок, находящихся в состоянии ожидания!");
-        }
+//        if (!event.getState().equals(State.PENDING)) {
+//            throw new ConflictException("Статус можно изменить только у заявок, находящихся в состоянии ожидания!");
+//        }
+
         Long confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         if (event.getParticipantLimit() != 0 && event.getParticipantLimit() <= (confirmedRequests)) {
             throw new ConflictException("Нельзя подтвердить заявку, если уже достигнут лимит по заявкам на данное событие!");
@@ -220,6 +226,12 @@ public class EventServiceImpl implements EventService {
         List<Request> rejected = new ArrayList<>();
 
         for (Request request : requestsToUpdate) {
+
+            if (!request.getStatus().equals(ParticipationRequestStatus.PENDING)) {
+                continue;
+            }
+
+
             if (!request.getEvent().getId().equals(eventId)) {
                 rejected.add(request);
                 continue;
@@ -285,6 +297,9 @@ public class EventServiceImpl implements EventService {
         if (event.getPublishedOn() != null && requestDto.getEventDate().isBefore(event.getPublishedOn().plusHours(1))) {
             throw new ValidationException("дата начала изменяемого события должна быть не ранее чем за час от даты публикации");
         }
+        if (requestDto.getStateAction() != null) {
+
+
         switch (requestDto.getStateAction()) {
             case PUBLISH_EVENT:
                 if (event.getState() != State.PENDING) {
@@ -305,6 +320,7 @@ public class EventServiceImpl implements EventService {
                     throw new ConflictException("Состояние события должно быть на ожидании или отмененным");
                 }
                 break;
+        }
         }
         updateEvents(event, requestDto);
         Event toUpdate = eventRepository.save(event);

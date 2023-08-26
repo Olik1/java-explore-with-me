@@ -17,21 +17,38 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateEventRequestDto {
-    @Size(min = 20, max = 2000)
+//    @Size(min = 20, max = 2000)
+//    private String annotation;
+//    private Long category;
+//    @Size(min = 20, max = 7000)
+//    private String description;
+//    @NotNull
+////    @FutureOrPresent
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    private LocalDateTime eventDate;
+//    private LocationDto location;
+//    private Boolean paid;
+//    private Long participantLimit;
+//    private Boolean requestModeration;
+//    @Size(min = 3, max = 120)
+//    private String title;
+//    private StateAction stateAction;
+
+       @Size(min = 20, max = 2000)
     private String annotation;
     private Long category;
-    @Size(min = 20, max = 7000)
+       @Size(min = 20, max = 7000)
     private String description;
-    @NotNull
-//    @FutureOrPresent
+       @FutureOrPresent
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
     private LocationDto location;
     private Boolean paid;
     private Long participantLimit;
     private Boolean requestModeration;
-    @Size(min = 3, max = 120)
-    private String title;
     private StateAction stateAction;
+      @Size(min = 3, max = 120)
+    private String title;
+
 
 }

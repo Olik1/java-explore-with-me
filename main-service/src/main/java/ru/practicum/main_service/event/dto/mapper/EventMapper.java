@@ -10,11 +10,11 @@ import ru.practicum.main_service.event.dto.NewEventDto;
 import ru.practicum.main_service.event.model.Event;
 import ru.practicum.main_service.event.model.Location;
 import ru.practicum.main_service.event.model.State;
+import ru.practicum.main_service.request.model.ParticipationRequestStatus;
 import ru.practicum.main_service.users.dto.UserDto;
 import ru.practicum.main_service.users.dto.UserMapper;
 import ru.practicum.main_service.users.model.User;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class EventMapper {
     public static EventFullDto toEventFullDto(Event event) {
         EventFullDto eventFullDto = EventFullDto.builder()
                 .annotation(event.getAnnotation())
-                .categoryDto(CategoriesMapper.toCategoryDto(event.getCategory()))
+                .category(CategoriesMapper.toCategoryDto(event.getCategory()))
                 .createdOn(event.getCreatedOn())
                 .description(event.getDescription())
                 .eventDate(event.getEventDate())
@@ -40,7 +40,7 @@ public class EventMapper {
                 .build();
         if (event.getParticipationRequests() != null && !event.getParticipationRequests().isEmpty()) {
             eventFullDto.setConfirmedRequests(event.getParticipationRequests().stream()
-                    .filter(participationRequest -> false)
+                             .filter(participationRequest -> participationRequest.getStatus() == ParticipationRequestStatus.CONFIRMED)
                     .count());
         } else eventFullDto.setConfirmedRequests(0L);
         return eventFullDto;
@@ -105,7 +105,7 @@ public class EventMapper {
     public EventFullDto mapToFullDto(Event event) {
         EventFullDto dto = new EventFullDto();
         dto.setAnnotation(event.getAnnotation());
-        dto.setCategoryDto(CategoriesMapper.toCategoryDto(event.getCategory()));
+        dto.setCategory(CategoriesMapper.toCategoryDto(event.getCategory()));
         dto.setCreatedOn(event.getCreatedOn());
         dto.setDescription(event.getDescription());
         dto.setEventDate(event.getEventDate());

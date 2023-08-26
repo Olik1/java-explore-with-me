@@ -59,8 +59,7 @@ class StatisticServiceImplTest {
         viewStatsList.add(new ViewStats("app1", "uri1", 1));
         viewStatsList.add(new ViewStats("app2", "uri2", 2));
 
-        when(statisticRepository.findAllByDateBetweenUnique(start, end)).thenReturn(viewStatsList);
-
+        when(statisticRepository.findAllStatsByUniqIp(start, end)).thenReturn(viewStatsList);
         List<StatsResponseDto> result = statisticService.getStatistics(LocalDateTime.of(2023, 8, 4, 0, 0, 0), LocalDateTime.of(2023, 8, 5, 0, 0, 0), uris, unique);
 
         assertEquals(2, result.size());
