@@ -59,6 +59,10 @@ public class RequestServiceImpl implements RequestService {
         if ( event.getParticipantLimit() != 0 && event.getParticipantLimit() <= confirmedRequestAmount) {
             throw new ConflictException("достигнут лимит запросов на участие!");
         }
+        if (requestsRepository.existsRequestByRequester_IdAndEvent_Id(userId, eventId)) {
+            throw new ConflictException("инициатор события не может добавить запрос на участие в своём событии");
+        }
+
         Request request = Request.builder()
                 .requester(user)
                 .event(event)

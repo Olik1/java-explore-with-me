@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.practicum.main_service.exception.ConflictException;
 import ru.practicum.main_service.exception.ObjectNotFoundException;
 import ru.practicum.main_service.users.dto.NewUserRequestDto;
 import ru.practicum.main_service.users.dto.UserDto;
@@ -37,6 +38,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(NewUserRequestDto userRequestDto) {
+        if(userRepository.existsUserByName(userRequestDto.getName())){
+            throw new ConflictException("Такой пользователь уже есть");
+        }
         User user = UserMapper.toUser(userRequestDto);
         log.info("Запрос POST на сохранение пользователя: {}", user.getName());
         return UserMapper.toUserDto(userRepository.save(user));
@@ -53,7 +57,6 @@ public class UserServiceImpl implements UserService {
     public boolean isUserExists(Long userId) {
         var userOptional = userRepository.findById(userId);
         return !userOptional.isEmpty();
-
     }
 
 }

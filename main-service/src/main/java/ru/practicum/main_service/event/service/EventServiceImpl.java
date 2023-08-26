@@ -193,9 +193,9 @@ public class EventServiceImpl implements EventService {
         if (!user.getId().equals(event.getInitiator().getId())) {
             throw new ConflictException("Пользователь не инициатор события!");
         }
-        if (event.getState().equals(State.PUBLISHED)) {
-            throw new ConflictException("Изменить можно только отмененные события или события в состоянии ожидания модерации!");
-        }
+//        if (event.getState().equals(State.PUBLISHED)) {
+//            throw new ConflictException("Изменить можно только отмененные события или события в состоянии ожидания модерации!");
+//        }
 
         List<Request> requests = requestRepository.findByEventId(eventId);
         return requests.stream().map(RequestMapper::toRequestDto).collect(Collectors.toList());
@@ -294,7 +294,7 @@ public class EventServiceImpl implements EventService {
     public EventFullDto adminUpdateEvent(Long eventId, UpdateEventRequestDto requestDto) {
         Event event = getEvents(eventId);
 
-        if (event.getPublishedOn() != null && requestDto.getEventDate().isBefore(event.getPublishedOn().plusHours(1))) {
+        if (requestDto.getEventDate() != null && event.getPublishedOn() != null && requestDto.getEventDate().isBefore(event.getPublishedOn().plusHours(1))) {
             throw new ValidationException("дата начала изменяемого события должна быть не ранее чем за час от даты публикации");
         }
         if (requestDto.getStateAction() != null) {

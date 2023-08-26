@@ -15,7 +15,7 @@ public class RequestController {
     private final RequestService requestsService;
 
     @GetMapping
-    public List<ParticipationRequestDto> getRequest(@RequestParam Long userId) {
+    public List<ParticipationRequestDto> getRequest(@PathVariable Long userId) {
         return requestsService.getRequest(userId);
     }
 

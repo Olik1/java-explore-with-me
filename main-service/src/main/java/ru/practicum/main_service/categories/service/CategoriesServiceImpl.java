@@ -9,6 +9,8 @@ import ru.practicum.main_service.categories.dto.CategoryDto;
 import ru.practicum.main_service.categories.dto.NewCategoryDto;
 import ru.practicum.main_service.categories.model.Categories;
 import ru.practicum.main_service.categories.repository.CategoriesRepository;
+import ru.practicum.main_service.event.repository.EventRepository;
+import ru.practicum.main_service.exception.ConflictException;
 import ru.practicum.main_service.exception.ObjectNotFoundException;
 
 import java.util.List;
@@ -19,6 +21,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoriesServiceImpl implements CategoriesService {
     private final CategoriesRepository categoriesRepository;
+    private final EventRepository eventRepository;
+
 
     @Override
     public List<CategoryDto> getCategories(Integer from, Integer size) {
@@ -37,6 +41,9 @@ public class CategoriesServiceImpl implements CategoriesService {
 
     @Override
     public CategoryDto createCategories(NewCategoryDto newCategoryDto) {
+        if (categoriesRepository.existsCategoriesByName(newCategoryDto.getName())){
+            throw new ConflictException("Такая категория уже есть");
+        }
         Categories categories = categoriesRepository.save(CategoriesMapper.toCategories(newCategoryDto));
         log.info("Запрос POST на сохранение категории: {}", newCategoryDto.getName());
         return CategoriesMapper.toCategoryDto(categories);
@@ -44,14 +51,31 @@ public class CategoriesServiceImpl implements CategoriesService {
 
     @Override
     public void deleteCategories(Long catId) {
-        getCategoriesIfExist(catId);
+
+
+        var category = categoriesRepository.findById(catId);
+
+        if (category == null){
+          throw  new ObjectNotFoundException("Не найдена выбранная категория");
+        }
+
+        if (eventRepository.existsEventsByCategory_Id(catId)) {
+             throw new ConflictException("Такой пользователь уже есть");
+        }
         categoriesRepository.deleteById(catId);
         log.info("Запрос DELETE на удаление категории: c id: {}", catId);
     }
 
     @Override
     public CategoryDto updateCategories(CategoryDto categoryDto) {
+
+
         Categories categories = getCategoriesIfExist(categoryDto.getId());
+
+        if (categoriesRepository.existsCategoriesByNameAndIdNot(categoryDto.getName(),categoryDto.getId())){
+            throw new ConflictException("Такая категория уже есть");
+        }
+
         categories.setName(categoryDto.getName());
         log.info("Запрос PATH на изменение категории: c id: {}", categoryDto.getId());
         return CategoriesMapper.toCategoryDto(categoriesRepository.save(categories));

@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByIdIn(List<Long> userIds, Pageable pageable);
+
+    boolean existsUserByName(String name);
 }
