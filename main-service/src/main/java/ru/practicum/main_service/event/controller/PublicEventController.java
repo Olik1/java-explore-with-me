@@ -10,8 +10,10 @@ import ru.practicum.main_service.event.model.SortEvents;
 import ru.practicum.main_service.event.service.EventService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ValidationException;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -20,22 +22,38 @@ import java.util.List;
 @RequestMapping("/events")
 public class PublicEventController {
     private final EventService eventService;
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+    //checked 
     @GetMapping
     public List<EventShortDto> getEvents(@RequestParam(required = false) String text,
                                          @RequestParam(required = false) List<Long> categories,
                                          @RequestParam(required = false) Boolean paid,
-                                         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                         LocalDateTime rangeStart,
-                                         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                         LocalDateTime rangeEnd,
-                                         @RequestParam(required = false) Boolean onlyAvailable,
-                                         @RequestParam(required = false) SortEvents sort,
-                                         @RequestParam(required = false, defaultValue = "0")
-                                         @PositiveOrZero Integer from,
-                                         @RequestParam(required = false, defaultValue = "10")
-                                         @PositiveOrZero Integer size, HttpServletRequest request) {
-        return eventService.getEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size, request);
+                                         @RequestParam(required = false) String rangeStart,
+                                         @RequestParam(required = false) String rangeEnd,
+                                         @RequestParam(required = false, defaultValue = "false") Boolean onlyAvailable,
+                                         @RequestParam(required = false, defaultValue = "EVENT_DATE") SortEvents sort,
+                                         @RequestParam(required = false, defaultValue = "0") Integer from,
+                                         @RequestParam(required = false, defaultValue = "10") Integer size,
+                                         HttpServletRequest request) {
+
+        LocalDateTime start = null;
+        LocalDateTime end = null;
+        if (rangeStart != null) {
+            start = LocalDateTime.parse(rangeStart, dateTimeFormatter);
+        }
+        if (rangeEnd != null) {
+            end = LocalDateTime.parse(rangeEnd, dateTimeFormatter);
+        }
+
+        if (start != null && end != null) {
+            if (start.isAfter(end)) {
+                log.info("Start date {} is after end date {}.", start, end);
+                throw new ValidationException(String.format("Start date %s is after end date %s.", start, end));
+            }
+        }
+
+        return eventService.getEvents(text, categories, paid, start, end, onlyAvailable, sort, from, size, request);
     }
 
     @GetMapping("/{id}")

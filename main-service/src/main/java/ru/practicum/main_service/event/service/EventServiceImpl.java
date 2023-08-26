@@ -77,21 +77,31 @@ public class EventServiceImpl implements EventService {
         List<Event> events = customBuiltEventRepository.findEventsPublic(criteria);
 
         List<EventShortDto> result = events.stream().map(EventMapper::mapToShortDto).collect(Collectors.toList());
-        statsClient.setViewsNumber(result);
-        for (EventShortDto event : result) {
-            event.setConfirmedRequests(requestRepository.countAllByEventIdAndStatus(event.getId(),
-                    ParticipationRequestStatus.CONFIRMED));
+
+        if(result.size() > 0 ){
+            statsClient.setViewsNumber(result);
+
+            for (EventShortDto event : result) {
+                event.setConfirmedRequests(requestRepository.countAllByEventIdAndStatus(event.getId(),
+                        ParticipationRequestStatus.CONFIRMED));
+            }
         }
+
         statsClient.saveHit(uri, ip);
 
-        for (EventShortDto event : result) {
-            statsClient.saveHit("/events/" + event.getId(), ip);
-        }
+       if (result.size() > 0){
+           for (EventShortDto event : result) {
+               statsClient.saveHit("/events/" + event.getId(), ip);
+           }
+       }else {
+           return new ArrayList<EventShortDto>();
+       }
         if (criteria.getSort() == SortEvents.VIEWS) {
             return result.stream().sorted(Comparator.comparingInt(EventShortDto::getViews)).collect(Collectors.toList());
-        } else {
-            return result.stream().sorted(Comparator.comparing(EventShortDto::getEventDate)).collect(Collectors.toList());
         }
+
+        return result.stream().sorted(Comparator.comparing(EventShortDto::getEventDate)).collect(Collectors.toList());
+
     }
 
     @Override
@@ -263,8 +273,11 @@ public class EventServiceImpl implements EventService {
                 .rangeEnd(end)
                 .build();
         List<Event> events = customBuiltEventRepository.getEvents(criteria);
-        log.info("Событи: {}.", events);
-        return EventMapper.mapToFullDto(events);
+        var result = events.stream().map(EventMapper::toEventFullDto)
+                .map(statsClient::setViewsNumber).collect(Collectors.toList());
+        log.info("Событие: {}.", events);
+//        return EventMapper.mapToFullDto(events);
+        return result;
     }
 
     @Override

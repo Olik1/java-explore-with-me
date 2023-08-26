@@ -18,6 +18,7 @@ import java.util.List;
 @RequestMapping("/admin/events")
 public class AdminEventController {
     private final EventService eventService;
+    //checked without request
 
     @GetMapping()
     public List<EventFullDto> adminGetEvents(@RequestParam(required = false) List<Long> users,

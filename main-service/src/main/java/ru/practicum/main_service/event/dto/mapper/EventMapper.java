@@ -20,7 +20,6 @@ import java.util.List;
 
 @UtilityClass
 public class EventMapper {
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static EventFullDto toEventFullDto(Event event) {
         EventFullDto eventFullDto = EventFullDto.builder()

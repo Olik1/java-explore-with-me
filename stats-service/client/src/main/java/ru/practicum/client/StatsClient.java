@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
@@ -49,7 +51,14 @@ public class StatsClient extends BaseClient {
         parameters.put("unique", unique);
         var query = "?start={start}&end={end}&uris={uris}&unique={unique}";
         var view = get(API_PREFIX_START + query, parameters);
-        return (List<StatsResponseDto>) view.getBody();
+        ResponseEntity<List<StatsResponseDto>> response = rest.exchange(API_PREFIX_START + query,
+                HttpMethod.GET, null,
+                new ParameterizedTypeReference<>() {
+                }, parameters);
+        List<StatsResponseDto> result = response.getBody();
+
+//        var result = (List<StatsResponseDto>) view.getBody();
+        return result;
 
     }
 }

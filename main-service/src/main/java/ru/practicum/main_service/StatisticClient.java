@@ -68,9 +68,10 @@ public class StatisticClient {
         }
         return events;
     }
+
     private Map<Long, Integer> mapHits(List<StatsResponseDto> hits) {
         Map<Long, Integer> hitMap = new HashMap<>();
-        for (StatsResponseDto hit : hits) {
+        for (var hit : hits) {
             String hitUri = hit.getUri();
             Long id = Long.valueOf(hitUri.substring(8));
             hitMap.put(id, (int) hit.getHits());
