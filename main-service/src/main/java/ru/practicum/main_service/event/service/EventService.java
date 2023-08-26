@@ -10,9 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventService {
-    List<EventShortDto> getEvents(String text, List<Long> categories, Boolean paid,
-                                  LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                                  Boolean onlyAvailable, SortEvents sort, Integer from, Integer size, HttpServletRequest request);
+    List<EventShortDto> getEvents(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, SortEvents sort, Integer from, Integer size, HttpServletRequest request);
 
     EventFullDto getEventById(Long eventId, HttpServletRequest request);
 
@@ -26,12 +24,9 @@ public interface EventService {
 
     List<ParticipationRequestDto> getRequestUserEvents(Long userId, Long eventId);
 
-    EventRequestStatusUpdateResult updateStatusRequestByUserIdForEvents
-            (Long userId, Long eventId,
-             EventRequestStatusUpdateRequest requestDto);
+    EventRequestStatusUpdateResult updateStatusRequestByUserIdForEvents(Long userId, Long eventId, EventRequestStatusUpdateRequest requestDto);
 
-    List<EventFullDto> adminGetEvents(List<Long> userIds, List<State> states, List<Long> categories,
-                                      String rangeStart, String rangeEnd, Integer from, Integer size);
+    List<EventFullDto> adminGetEvents(List<Long> userIds, List<State> states, List<Long> categories, String rangeStart, String rangeEnd, Integer from, Integer size);
 
     EventFullDto adminUpdateEvent(Long eventId, UpdateEventRequestDto requestDto);
 }
