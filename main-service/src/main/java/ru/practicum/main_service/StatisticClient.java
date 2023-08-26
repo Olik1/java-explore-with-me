@@ -32,11 +32,6 @@ public class StatisticClient {
         return statsClient.postEndpointHit(hitRequestDto);
     }
 
-//    public Long getViewsByEventId(Long eventId) {
-//        List<StatsResponseDto> hitsList = statsClient.getStatistic(LocalDateTime.now().minusDays(30),
-//                LocalDateTime.now(), List.of("/events/" + eventId), true);
-//        return !hitsList.isEmpty() ? hitsList.get(0).getHits() : 0L;
-//    }
     public EventFullDto setViewsNumber(EventFullDto event) {
         List<StatsResponseDto> hits = statsClient.getStatistic(event.getCreatedOn(), LocalDateTime.now(),
                 List.of("/events/" + event.getId()), true);
@@ -47,6 +42,7 @@ public class StatisticClient {
         }
         return event;
     }
+
     public List<EventShortDto> setViewsNumber(List<EventShortDto> events) {
         List<String> uris = new ArrayList<>();
         for (EventShortDto eventShortDto : events) {

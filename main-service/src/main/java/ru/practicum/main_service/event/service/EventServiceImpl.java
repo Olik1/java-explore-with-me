@@ -106,7 +106,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto getEventById(Long eventId, HttpServletRequest request) {
-        Event event = eventRepository.findByIdAndAndState(eventId, State.PUBLISHED) //событие должно быть опубликовано
+        Event event = eventRepository.findByIdAndAndState(eventId, State.PUBLISHED)
                 .orElseThrow(() -> new ObjectNotFoundException("Не найдено опубликованное событие"));
         String ip = request.getRemoteAddr();
         EventFullDto eventFullDto = EventMapper.toEventFullDto(event);
@@ -138,7 +138,6 @@ public class EventServiceImpl implements EventService {
         }
         User user = getUser(userId);
         Location location = getLocation(newEventDto.getLocation());
-//        Location location = LocationMapper.toLocation(newEventDto.getLocation());
         locationRepository.save(location);
         Categories categories = getCategoriesIfExist(newEventDto.getCategory());
         Event event = EventMapper.toEvent(newEventDto, categories, location, user);
@@ -166,16 +165,16 @@ public class EventServiceImpl implements EventService {
         }
         updateEvents(event, requestDto);
 
-        if(requestDto.getStateAction() != null) {
+        if (requestDto.getStateAction() != null) {
 
-        switch (requestDto.getStateAction()) {
-            case CANCEL_REVIEW:
-                event.setState(State.CANCELED);
-                break;
-            case SEND_TO_REVIEW:
-                event.setState(State.PENDING);
-                event.setPublishedOn(LocalDateTime.now());
-        }
+            switch (requestDto.getStateAction()) {
+                case CANCEL_REVIEW:
+                    event.setState(State.CANCELED);
+                    break;
+                case SEND_TO_REVIEW:
+                    event.setState(State.PENDING);
+                    event.setPublishedOn(LocalDateTime.now());
+            }
         }
         Event toUpdate = eventRepository.save(event);
         EventFullDto eventFullDto = EventMapper.toEventFullDto(toUpdate);
@@ -193,9 +192,6 @@ public class EventServiceImpl implements EventService {
         if (!user.getId().equals(event.getInitiator().getId())) {
             throw new ConflictException("Пользователь не инициатор события!");
         }
-//        if (event.getState().equals(State.PUBLISHED)) {
-//            throw new ConflictException("Изменить можно только отмененные события или события в состоянии ожидания модерации!");
-//        }
 
         List<Request> requests = requestRepository.findByEventId(eventId);
         return requests.stream().map(RequestMapper::toRequestDto).collect(Collectors.toList());
@@ -213,9 +209,6 @@ public class EventServiceImpl implements EventService {
         if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
             throw new ConflictException("Не требуется модерация и подтверждения заявок");
         }
-//        if (!event.getState().equals(State.PENDING)) {
-//            throw new ConflictException("Статус можно изменить только у заявок, находящихся в состоянии ожидания!");
-//        }
 
         Long confirmedRequests = requestRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         if (event.getParticipantLimit() != 0 && event.getParticipantLimit() <= (confirmedRequests)) {
@@ -285,8 +278,7 @@ public class EventServiceImpl implements EventService {
         List<Event> events = customBuiltEventRepository.getEvents(criteria);
         var result = events.stream().map(EventMapper::toEventFullDto)
                 .map(statsClient::setViewsNumber).collect(Collectors.toList());
-        //log.info("Событие: {}.", events);
-//        return EventMapper.mapToFullDto(events);
+
         return result;
     }
 
@@ -300,27 +292,27 @@ public class EventServiceImpl implements EventService {
         if (requestDto.getStateAction() != null) {
 
 
-        switch (requestDto.getStateAction()) {
-            case PUBLISH_EVENT:
-                if (event.getState() != State.PENDING) {
-                    throw new ConflictException("Состояние события должно быть PENDING");
-                }
-                event.setState(State.PUBLISHED);
-                event.setPublishedOn(LocalDateTime.now());
-                break;
-            case REJECT_EVENT:
-                if (event.getState() == State.PUBLISHED) {
-                    throw new ConflictException("Невозможно отменить опубликованное мероприятие");
-                }
-                event.setState(State.CANCELED);
-                break;
-            case SEND_TO_REVIEW:
-            case CANCEL_REVIEW:
-                if (event.getState() == State.PUBLISHED) {
-                    throw new ConflictException("Состояние события должно быть на ожидании или отмененным");
-                }
-                break;
-        }
+            switch (requestDto.getStateAction()) {
+                case PUBLISH_EVENT:
+                    if (event.getState() != State.PENDING) {
+                        throw new ConflictException("Состояние события должно быть PENDING");
+                    }
+                    event.setState(State.PUBLISHED);
+                    event.setPublishedOn(LocalDateTime.now());
+                    break;
+                case REJECT_EVENT:
+                    if (event.getState() == State.PUBLISHED) {
+                        throw new ConflictException("Невозможно отменить опубликованное мероприятие");
+                    }
+                    event.setState(State.CANCELED);
+                    break;
+                case SEND_TO_REVIEW:
+                case CANCEL_REVIEW:
+                    if (event.getState() == State.PUBLISHED) {
+                        throw new ConflictException("Состояние события должно быть на ожидании или отмененным");
+                    }
+                    break;
+            }
         }
         updateEvents(event, requestDto);
         Event toUpdate = eventRepository.save(event);

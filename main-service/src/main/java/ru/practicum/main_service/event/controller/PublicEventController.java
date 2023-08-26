@@ -24,7 +24,6 @@ public class PublicEventController {
     private final EventService eventService;
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    //checked 
     @GetMapping
     public List<EventShortDto> getEvents(@RequestParam(required = false) String text,
                                          @RequestParam(required = false) List<Long> categories,
@@ -55,7 +54,7 @@ public class PublicEventController {
 
         return eventService.getEvents(text, categories, paid, start, end, onlyAvailable, sort, from, size, request);
     }
-    //checked without views - не считаются просмотры
+
     @GetMapping("/{id}")
     public EventFullDto getEventById(@PathVariable Long id, HttpServletRequest request) {
 

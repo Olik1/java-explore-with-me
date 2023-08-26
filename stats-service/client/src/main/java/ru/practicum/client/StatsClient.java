@@ -57,7 +57,6 @@ public class StatsClient extends BaseClient {
                 }, parameters);
         List<StatsResponseDto> result = response.getBody();
 
-//        var result = (List<StatsResponseDto>) view.getBody();
         return result;
 
     }

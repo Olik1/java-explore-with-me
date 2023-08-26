@@ -17,20 +17,20 @@ import javax.validation.Valid;
 @RequestMapping("/admin/compilations")
 public class AdminCompilationsController {
     private final CompilationService compilationService;
-    //checked without events
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto createCompilation(@RequestBody(required = false)
                                             @Valid NewCompilationDto newCompilationDto) {
         return compilationService.createCompilation(newCompilationDto);
     }
-    //checked without events
+
     @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCompilation(@PathVariable Long compId) {
         compilationService.deleteCompilation(compId);
     }
-    //checked without events
+
     @PatchMapping("/{compId}")
     public CompilationDto updateCompilation(@PathVariable Long compId,
                                             @RequestBody @Valid

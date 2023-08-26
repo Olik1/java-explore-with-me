@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.HitRequestDto;
 import ru.practicum.StatsResponseDto;
+import ru.practicum.exception.ValidationException;
 import ru.practicum.mapper.StatsMapper;
 import ru.practicum.model.ViewStats;
 import ru.practicum.repository.StatisticRepository;
@@ -40,7 +41,7 @@ public class StatisticServiceImpl implements StatisticService {
         List<ViewStats> viewStatsList;
 
         if (start.isAfter(end)) {
-            throw new IllegalArgumentException("Время начала не может быть позднее даты конца диапазона!");
+            throw new ValidationException("Время начала не может быть позднее даты конца диапазона!");
         }
         if (uris == null || uris.isEmpty()) {
             if (unique) {
@@ -49,7 +50,6 @@ public class StatisticServiceImpl implements StatisticService {
                 viewStatsList = statisticRepository.findAllByDateBetween(start, end);
             }
         } else {
-            //TODO не считаются views - надо переделать!
             if (unique) {
                 viewStatsList = statisticRepository.findStatsByUrisByUniqIp(start, end, uris);
             } else {

@@ -18,7 +18,6 @@ import java.util.List;
 @RequestMapping("/admin/events")
 public class AdminEventController {
     private final EventService eventService;
-    //checked without request
 
     @GetMapping()
     public List<EventFullDto> adminGetEvents(@RequestParam(required = false) List<Long> users,
@@ -31,10 +30,10 @@ public class AdminEventController {
 
         return eventService.adminGetEvents(users, states, categories, rangeStart, rangeEnd, from, size);
     }
-    //checked without request
+
     @PatchMapping("/{eventId}")
     public EventFullDto patchAdminEvent(@PathVariable @Min(1) Long eventId,
-                                   @RequestBody @Validated UpdateEventRequestDto requestDto) {
+                                        @RequestBody @Validated UpdateEventRequestDto requestDto) {
         return eventService.adminUpdateEvent(eventId, requestDto);
     }
 }

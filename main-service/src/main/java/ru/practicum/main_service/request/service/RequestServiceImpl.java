@@ -47,7 +47,6 @@ public class RequestServiceImpl implements RequestService {
     public ParticipationRequestDto createRequest(Long userId, Long eventId) {
         User user = getUserById(userId);
         Event event = getEventsById(eventId);
-       // Long limit = eventRepository.findCountedRequestsByEventIdAndConfirmedStatus(eventId);
         Long confirmedRequestAmount = requestsRepository.countAllByEventIdAndStatus(eventId, ParticipationRequestStatus.CONFIRMED);
         // выбирает из Request, где поле `event.id` равно заданному `eventId` и поле `status` равно "CONFIRMED"
         if (user.getId().equals(event.getInitiator().getId())) {
