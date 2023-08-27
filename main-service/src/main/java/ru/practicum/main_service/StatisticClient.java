@@ -18,9 +18,9 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class StatisticClient {
-
-    private final StatsClient statsClient;
     private static final String APP = "main-service";
+    private static final int YEARS_OFFSET = 100;
+    private final StatsClient statsClient;
 
     public ResponseEntity<Object> saveHit(String uri, String ip) {
         HitRequestDto hitRequestDto = HitRequestDto.builder()
@@ -49,7 +49,7 @@ public class StatisticClient {
             uris.add("/events/" + eventShortDto.getId());
         }
 
-        List<StatsResponseDto> hits = statsClient.getStatistic(LocalDateTime.now().minusYears(100),
+        List<StatsResponseDto> hits = statsClient.getStatistic(LocalDateTime.now().minusYears(YEARS_OFFSET),
                 LocalDateTime.now(), uris, true);
         if (!hits.isEmpty()) {
             Map<Long, Integer> hitMap = mapHits(hits);

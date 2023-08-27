@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.main_service.categories.dto.CategoriesMapper;
 import ru.practicum.main_service.categories.dto.CategoryDto;
 import ru.practicum.main_service.categories.dto.NewCategoryDto;
@@ -25,6 +26,7 @@ public class CategoriesServiceImpl implements CategoriesService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<CategoryDto> getCategories(Integer from, Integer size) {
         int offset = from > 0 ? from / size : 0;
         PageRequest page = PageRequest.of(offset, size);
@@ -81,7 +83,7 @@ public class CategoriesServiceImpl implements CategoriesService {
         return CategoriesMapper.toCategoryDto(categoriesRepository.save(categories));
     }
 
-    public Categories getCategoriesIfExist(Long catId) {
+    private Categories getCategoriesIfExist(Long catId) {
         return categoriesRepository.findById(catId).orElseThrow(
                 () -> new ObjectNotFoundException("Не найдена выбранная категория"));
     }
