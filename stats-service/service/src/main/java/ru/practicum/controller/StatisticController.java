@@ -36,4 +36,5 @@ public class StatisticController {
                                                Boolean unique) {
         return statisticService.getStatistics(start, end, uris, unique);
     }
+
 }

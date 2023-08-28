@@ -39,7 +39,6 @@ class StatisticControllerTest {
     private StatisticService statisticService;
     @InjectMocks
     StatisticController statisticController;
-    //set up вызов проверки
     private static final String HIT_URL = "/hit";
     private static final String STATS_URL = "/stats";
     private HitRequestDto hitRequestDto;
