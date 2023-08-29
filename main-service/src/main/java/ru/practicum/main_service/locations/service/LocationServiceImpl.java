@@ -27,10 +27,10 @@ public class LocationServiceImpl implements LocationService {
             throw new ValidationException("Такие координаты уже существуют!");
         }
         Location location = LocationMapper.toLocation(newLocationtDto);
+        location.setStatus(LocationStatus.APPROVED);
         locationRepository.save(location);
         log.info("Запрос POST на добавление локации, с id: {}", newLocationtDto.getId());
         var result = LocationMapper.toNewLocationtDto(location);
-        result.setStatus(LocationStatus.APPROVED);
         return result;
     }
 

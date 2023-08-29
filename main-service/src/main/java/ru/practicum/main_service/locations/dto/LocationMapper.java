@@ -27,13 +27,14 @@ public class LocationMapper {
                 .radius(newLocationtDto.getRadius())
                 .build();
     }
-    public static NewLocationtDto toNewLocationtDto(Location newLocationtDto) {
+    public static NewLocationtDto toNewLocationtDto(Location location) {
         return NewLocationtDto.builder()
-                .id(newLocationtDto.getId())
-                .name(newLocationtDto.getName())
-                .lat(newLocationtDto.getLat())
-                .lon(newLocationtDto.getLon())
-                .radius(newLocationtDto.getRadius())
+                .id(location.getId())
+                .name(location.getName())
+                .lat(location.getLat())
+                .lon(location.getLon())
+                .status(location.getStatus())
+                .radius(location.getRadius())
                 .build();
     }
 }
