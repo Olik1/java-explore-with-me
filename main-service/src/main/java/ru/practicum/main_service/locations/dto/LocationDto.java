@@ -1,4 +1,4 @@
-package ru.practicum.main_service.event.dto;
+package ru.practicum.main_service.locations.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
