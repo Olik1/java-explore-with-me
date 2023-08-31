@@ -42,7 +42,7 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public void deleteLocation(long id) {
         var location = findLocationById(id);
-        if(location.getName() == null || location.getRadius() == null) {
+        if (location.getName() == null || location.getRadius() == null) {
             throw new ObjectNotFoundException("Эта локация не найдена!");
         }
         locationRepository.deleteById(id);
