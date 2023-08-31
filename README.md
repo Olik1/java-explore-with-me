@@ -1,4 +1,7 @@
 # java-explore-with-me
+ссылка на пул-реквест:
+https://github.com/Olik1/java-explore-with-me/pull/5
+
 https://dbdiagram.io/d/64d4c0cf02bd1c4a5e8fcad2
 
 ### Реализация дополнительной функциональности: location

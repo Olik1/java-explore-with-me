@@ -1,14 +1,11 @@
 package ru.practicum.main_service.event.service;
 
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.practicum.main_service.event.dto.*;
 import ru.practicum.main_service.event.model.SortEvents;
 import ru.practicum.main_service.event.model.State;
 import ru.practicum.main_service.request.dto.ParticipationRequestDto;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 

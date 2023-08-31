@@ -2,11 +2,9 @@ package ru.practicum.main_service.locations.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.practicum.main_service.categories.model.Categories;
 import ru.practicum.main_service.exception.ConflictException;
 import ru.practicum.main_service.exception.ObjectNotFoundException;
 import ru.practicum.main_service.locations.LocationRepository;
@@ -16,7 +14,6 @@ import ru.practicum.main_service.locations.dto.NewLocationtDto;
 import ru.practicum.main_service.locations.model.Location;
 import ru.practicum.main_service.locations.model.LocationStatus;
 
-import javax.validation.ValidationException;
 import java.util.List;
 import java.util.stream.Collectors;
 

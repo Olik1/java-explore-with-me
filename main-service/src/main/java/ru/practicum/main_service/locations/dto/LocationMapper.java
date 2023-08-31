@@ -18,6 +18,7 @@ public class LocationMapper {
                 .lon(location.getLon())
                 .build();
     }
+
     public static Location toLocation(NewLocationtDto newLocationtDto) {
         return Location.builder()
                 .name(newLocationtDto.getName())
@@ -27,6 +28,7 @@ public class LocationMapper {
                 .radius(newLocationtDto.getRadius())
                 .build();
     }
+
     public static NewLocationtDto toNewLocationtDto(Location location) {
         return NewLocationtDto.builder()
                 .id(location.getId())
@@ -37,6 +39,7 @@ public class LocationMapper {
                 .radius(location.getRadius())
                 .build();
     }
+
     public static LocationResponseDto toLocationResponseDto(Location location) {
         return LocationResponseDto.builder()
                 .id(location.getId())

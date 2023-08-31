@@ -8,9 +8,9 @@ import ru.practicum.main_service.event.dto.EventFullDto;
 import ru.practicum.main_service.event.dto.EventShortDto;
 import ru.practicum.main_service.event.dto.NewEventDto;
 import ru.practicum.main_service.event.model.Event;
+import ru.practicum.main_service.event.model.State;
 import ru.practicum.main_service.locations.dto.LocationMapper;
 import ru.practicum.main_service.locations.model.Location;
-import ru.practicum.main_service.event.model.State;
 import ru.practicum.main_service.request.model.ParticipationRequestStatus;
 import ru.practicum.main_service.users.dto.UserDto;
 import ru.practicum.main_service.users.dto.UserMapper;
@@ -42,7 +42,7 @@ public class EventMapper {
                 .build();
         if (event.getParticipationRequests() != null && !event.getParticipationRequests().isEmpty()) {
             eventFullDto.setConfirmedRequests(event.getParticipationRequests().stream()
-                             .filter(participationRequest -> participationRequest.getStatus() == ParticipationRequestStatus.CONFIRMED)
+                    .filter(participationRequest -> participationRequest.getStatus() == ParticipationRequestStatus.CONFIRMED)
                     .count());
         } else eventFullDto.setConfirmedRequests(0L);
         return eventFullDto;
@@ -87,11 +87,13 @@ public class EventMapper {
                 .title(event.getTitle())
                 .build();
     }
+
     public List<EventShortDto> mapToShortDto(List<Event> events) {
         return events.stream()
                 .map(EventMapper::mapToShortDto)
                 .collect(Collectors.toList());
     }
+
     public static Event toEvent(NewEventDto newEventDto, Categories categories, Location location, User user) {
         return Event.builder()
                 .annotation(newEventDto.getAnnotation())

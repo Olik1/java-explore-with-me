@@ -18,10 +18,12 @@ public class AdminLocationController {
         var result = locationService.createLocation(newLocationtDto);
         return result;
     }
+
     @PatchMapping("/{id}")
     public NewLocationtDto updateLocation(@PathVariable long id, @RequestBody NewLocationtDto newLocationtDto) {
         return locationService.updateLocation(id, newLocationtDto);
     }
+
     @DeleteMapping("/{id}")
     public void deleteLocation(@PathVariable long id) {
         locationService.deleteLocation(id);
