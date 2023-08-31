@@ -18,6 +18,7 @@ import ru.practicum.main_service.users.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @UtilityClass
 public class EventMapper {
@@ -86,7 +87,11 @@ public class EventMapper {
                 .title(event.getTitle())
                 .build();
     }
-
+    public List<EventShortDto> mapToShortDto(List<Event> events) {
+        return events.stream()
+                .map(EventMapper::mapToShortDto)
+                .collect(Collectors.toList());
+    }
     public static Event toEvent(NewEventDto newEventDto, Categories categories, Location location, User user) {
         return Event.builder()
                 .annotation(newEventDto.getAnnotation())

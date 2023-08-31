@@ -3,6 +3,8 @@ package ru.practicum.main_service.event.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.main_service.StatisticClient;
 import ru.practicum.main_service.categories.model.Categories;
@@ -137,7 +139,6 @@ public class EventServiceImpl implements EventService {
         }
         User user = getUser(userId);
         Location location = getLocation(newEventDto.getLocation());
-        locationRepository.save(location);
         Categories categories = getCategoriesIfExist(newEventDto.getCategory());
         Event event = EventMapper.toEvent(newEventDto, categories, location, user);
         event.setConfirmedRequests(0L);
@@ -321,6 +322,33 @@ public class EventServiceImpl implements EventService {
         return eventFullDto;
     }
 
+    @Override
+    public List<EventShortDto> getEventsListInLocation(Long locationId, Float lat, Float lon, Float radius, Integer from, Integer size) {
+        Pageable page = PageRequest.of(from / size, size, Sort.by("eventDate").descending());
+        List<Event> events;
+
+        if (locationId != null) {
+            Location location = locationRepository.findById(locationId).orElseThrow(
+                    () -> new ObjectNotFoundException("Локация не найдена!"));
+            events = eventRepository.findEventsWithLocationRadius(
+                    location.getLat(),
+                    location.getLon(),
+                    location.getRadius(),
+                    State.PUBLISHED,
+                    page);
+        } else {
+            if (lat == null || lon == null) {
+                throw new ObjectNotFoundException("Точки не указаны!");
+            } else {
+                events = eventRepository.findEventsWithLocationRadius(
+                        lat, lon, radius, State.PUBLISHED, page);
+            }
+        }
+        var result = events.stream().map(EventMapper::mapToShortDto).collect(Collectors.toList());
+        return result;
+
+    }
+
     private void updateEvents(Event event, UpdateEventRequestDto requestDto) {
         if (requestDto.getAnnotation() != null) {
             event.setAnnotation(requestDto.getAnnotation());
@@ -356,7 +384,9 @@ public class EventServiceImpl implements EventService {
     }
 
     private Location getLocation(LocationDto locationDto) {
-        Optional<Location> location = locationRepository.findByLatAndLon(locationDto.getLat(), locationDto.getLon());
+
+        Optional<Location> location = locationRepository.findByLatAndLonAndName(
+                locationDto.getLat(), locationDto.getLon(), null);
 
         Location savedLocation;
         if (location.isPresent()) {

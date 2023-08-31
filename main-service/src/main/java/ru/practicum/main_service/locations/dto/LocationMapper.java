@@ -37,4 +37,13 @@ public class LocationMapper {
                 .radius(location.getRadius())
                 .build();
     }
+    public static LocationResponseDto toLocationResponseDto(Location location) {
+        return LocationResponseDto.builder()
+                .id(location.getId())
+                .name(location.getName())
+                .lat(location.getLat())
+                .lon(location.getLon())
+                .radius(location.getRadius())
+                .build();
+    }
 }

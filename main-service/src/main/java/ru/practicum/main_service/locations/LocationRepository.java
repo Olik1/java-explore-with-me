@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface LocationRepository extends JpaRepository<Location, Long> {
     Optional<Location> findByLatAndLon(Float lat, Float lon);
+    Optional<Location> findByLatAndLonAndName(Float lat, Float lon, String name);
+
     boolean existsLocationByName(String name);
     boolean existsLocationByLatAndLon(Float lat, Float lon);
 }
