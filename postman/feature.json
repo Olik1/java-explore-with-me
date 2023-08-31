@@ -330,7 +330,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"annotation\": \"Где-то здесь была аннотация\",\r\n  \"category\": 1,\r\n  \"description\": \"Тут мы добавили описание.\",\r\n  \"eventDate\": \"2024-01-24 10:10:10\",\r\n  \"location\": {\r\n    \"lat\": 55.88209915161133,\r\n    \"lon\": 123.34559631347656\r\n  },\r\n  \"paid\": true,\r\n  \"participantLimit\": 10,\r\n  \"requestModeration\": false,\r\n  \"title\": \"Просмотр Властелина Колец\"\r\n}",
+							"raw": "{\r\n  \"annotation\": \"Где-то здесь была аннотация\",\r\n  \"category\": 10,\r\n  \"description\": \"Тут мы добавили описание.\",\r\n  \"eventDate\": \"2024-01-24 10:10:10\",\r\n  \"location\": {\r\n    \"lat\": 55.88209915161133,\r\n    \"lon\": 123.34559631347656\r\n  },\r\n  \"paid\": true,\r\n  \"participantLimit\": 10,\r\n  \"requestModeration\": false,\r\n  \"title\": \"Просмотр Властелина Колец\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -423,7 +423,7 @@
 							"variable": [
 								{
 									"key": "eventId",
-									"value": "1"
+									"value": "106"
 								}
 							]
 						}
@@ -477,14 +477,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/admin/locations/2",
+							"raw": "{{baseUrl}}/admin/locations/110",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"admin",
 								"locations",
-								"2"
+								"110"
 							]
 						}
 					},
@@ -535,14 +535,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/admin/locations/1",
+							"raw": "{{baseUrl}}/admin/locations/109",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"admin",
 								"locations",
-								"1"
+								"109"
 							]
 						}
 					},
@@ -597,7 +597,7 @@
 							"variable": [
 								{
 									"key": "Id",
-									"value": "2"
+									"value": "110"
 								}
 							]
 						}
@@ -715,7 +715,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/events/locations?locationId=2",
+							"raw": "{{baseUrl}}/events/locations?locationId=110",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -726,7 +726,7 @@
 							"query": [
 								{
 									"key": "locationId",
-									"value": "2"
+									"value": "110"
 								}
 							]
 						}
@@ -758,14 +758,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/admin/locations/1",
+							"raw": "{{baseUrl}}/admin/locations/109",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"admin",
 								"locations",
-								"1"
+								"109"
 							]
 						}
 					},
