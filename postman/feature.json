@@ -481,7 +481,7 @@
 							"variable": [
 								{
 									"key": "eventId",
-									"value": "103"
+									"value": "106"
 								}
 							]
 						}
@@ -535,14 +535,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/admin/locations/107",
+							"raw": "{{baseUrl}}/admin/locations/109",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"admin",
 								"locations",
-								"107"
+								"109"
 							]
 						}
 					},
@@ -593,14 +593,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/admin/locations/107",
+							"raw": "{{baseUrl}}/admin/locations/110",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"admin",
 								"locations",
-								"107"
+								"110"
 							]
 						}
 					},
@@ -684,7 +684,7 @@
 							"variable": [
 								{
 									"key": "Id",
-									"value": "106"
+									"value": "109"
 								}
 							]
 						}
@@ -802,7 +802,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/events/locations?locationId=107",
+							"raw": "{{baseUrl}}/events/locations?locationId=109",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -813,7 +813,7 @@
 							"query": [
 								{
 									"key": "locationId",
-									"value": "107"
+									"value": "109"
 								}
 							]
 						}
@@ -845,14 +845,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/admin/locations/107",
+							"raw": "{{baseUrl}}/admin/locations/109",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"admin",
 								"locations",
-								"107"
+								"109"
 							]
 						}
 					},
