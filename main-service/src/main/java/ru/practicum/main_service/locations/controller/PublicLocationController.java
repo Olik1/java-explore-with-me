@@ -27,6 +27,7 @@ public class PublicLocationController {
                                                   @RequestParam(defaultValue = "10") Integer size) {
         return locationService.getLocations(from, size);
     }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public NewLocationtDto createLocationByUser(@RequestBody @Valid NewLocationtDto newLocationtDto) {
