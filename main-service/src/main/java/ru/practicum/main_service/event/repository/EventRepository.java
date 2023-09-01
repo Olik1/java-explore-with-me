@@ -23,13 +23,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     boolean existsEventsByCategory_Id(Long catId);
 
-//    @Query("SELECT e FROM Event e " +
-//            "WHERE FUNCTION('distance', :lat, :lon, e.location.lat, e.location.lon) " +
-//            "<= :radius " +
-//            "AND e.state = :state " +
-//            "ORDER BY e.eventDate DESC ")
-//    List<Event> findEventsWithLocationRadius(Float lat, Float lon, Float radius, State state, Pageable pageable);
-
     @Query("SELECT e FROM Event e " +
             "WHERE FUNCTION('distance', :lat, :lon, e.location.lat, e.location.lon) " +
             "<= :radius " +

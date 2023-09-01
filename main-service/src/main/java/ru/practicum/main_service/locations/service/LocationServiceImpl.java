@@ -32,7 +32,7 @@ public class LocationServiceImpl implements LocationService {
             throw new ConflictException("Такие координаты уже существуют!");
         }
         Location location = LocationMapper.toLocation(newLocationtDto);
-        location.setStatus(LocationStatus.APPROVED);
+        location.setStatus(newLocationtDto.getStatus());
         locationRepository.save(location);
         log.info("Запрос POST на добавление локации, с id: {}", newLocationtDto.getId());
         var result = LocationMapper.toNewLocationtDto(location);
@@ -64,9 +64,9 @@ public class LocationServiceImpl implements LocationService {
         if (newLocationtDto.getRadius() != null) {
             location.setRadius(newLocationtDto.getRadius());
         }
-        if (newLocationtDto.getStatus() != null) {
-            location.setStatus(newLocationtDto.getStatus());
-        }
+//        if (newLocationtDto.getStatus() != null) {
+//            location.setStatus(newLocationtDto.getStatus());
+//        }
         locationRepository.save(location);
         return LocationMapper.toNewLocationtDto(location);
     }
@@ -91,6 +91,15 @@ public class LocationServiceImpl implements LocationService {
         var result = locationList.stream().map(LocationMapper::toLocationResponseDto).collect(Collectors.toList());
         return result;
     }
+
+    @Override
+    public NewLocationtDto confirmLocation(long id, boolean approved) {
+        Location location = findLocationById(id);
+        location.setStatus(approved ? LocationStatus.APPROVED : LocationStatus.CANCELED);
+        locationRepository.save(location);
+        return LocationMapper.toNewLocationtDto(location);
+    }
+
 
     private Location findLocationById(long id) {
         return locationRepository.findById(id).orElseThrow(
