@@ -10,7 +10,7 @@
 			"name": "POST",
 			"item": [
 				{
-					"name": "добавление локации 1",
+					"name": "добавление локации админом 11",
 					"event": [
 						{
 							"listen": "test",
@@ -69,7 +69,7 @@
 					"response": []
 				},
 				{
-					"name": "добавление локации 2",
+					"name": "добавление локации админом 2",
 					"event": [
 						{
 							"listen": "test",
@@ -121,6 +121,64 @@
 							],
 							"path": [
 								"admin",
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "добавление локации пользователем",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+									"    pm.response.to.have.status(201);   \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json();\r",
+									"var query = {};\r",
+									"pm.request.url.query.all().forEach((param) => { query[param.key] = param.value});\r",
+									"\r",
+									"pm.test(\"При создании у локации должен быть статус APPROVED\", function () {\r",
+									"    pm.expect(target.status).equal(\"PENDING\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Локация должна содержать поля: id, lat, lon, name, radius, status\", function () {\r",
+									"pm.expect(target).to.have.property('id');\r",
+									"pm.expect(target).to.have.property('lat');\r",
+									"pm.expect(target).to.have.property('lon');\r",
+									"pm.expect(target).to.have.property('name');\r",
+									"pm.expect(target).to.have.property('radius');\r",
+									"pm.expect(target).to.have.property('status');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"г.Мвыосква\",\r\n    \"lat\": 5335.8829,\r\n    \"lon\": 123.3456,\r\n    \"radius\": 2.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/locations",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
 								"locations"
 							]
 						}
@@ -423,7 +481,7 @@
 							"variable": [
 								{
 									"key": "eventId",
-									"value": "106"
+									"value": "103"
 								}
 							]
 						}
@@ -477,14 +535,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/admin/locations/110",
+							"raw": "{{baseUrl}}/admin/locations/107",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"admin",
 								"locations",
-								"110"
+								"107"
 							]
 						}
 					},
@@ -535,14 +593,43 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/admin/locations/109",
+							"raw": "{{baseUrl}}/admin/locations/107",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"admin",
 								"locations",
-								"109"
+								"107"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "подтверждение статуса администратором",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "true",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/locations/confirm/108",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"locations",
+								"confirm",
+								"108"
 							]
 						}
 					},
@@ -597,7 +684,7 @@
 							"variable": [
 								{
 									"key": "Id",
-									"value": "110"
+									"value": "106"
 								}
 							]
 						}
@@ -715,7 +802,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/events/locations?locationId=110",
+							"raw": "{{baseUrl}}/events/locations?locationId=107",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -726,7 +813,7 @@
 							"query": [
 								{
 									"key": "locationId",
-									"value": "110"
+									"value": "107"
 								}
 							]
 						}
@@ -758,14 +845,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/admin/locations/109",
+							"raw": "{{baseUrl}}/admin/locations/107",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"admin",
 								"locations",
-								"109"
+								"107"
 							]
 						}
 					},

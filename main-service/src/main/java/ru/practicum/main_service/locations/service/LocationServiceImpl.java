@@ -64,9 +64,7 @@ public class LocationServiceImpl implements LocationService {
         if (newLocationtDto.getRadius() != null) {
             location.setRadius(newLocationtDto.getRadius());
         }
-//        if (newLocationtDto.getStatus() != null) {
-//            location.setStatus(newLocationtDto.getStatus());
-//        }
+
         locationRepository.save(location);
         return LocationMapper.toNewLocationtDto(location);
     }
