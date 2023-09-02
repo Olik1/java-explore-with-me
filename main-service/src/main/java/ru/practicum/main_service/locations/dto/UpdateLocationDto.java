@@ -5,7 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import ru.practicum.main_service.locations.model.LocationStatus;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 @Data
 @Builder

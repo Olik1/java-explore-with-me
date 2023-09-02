@@ -3,7 +3,6 @@ package ru.practicum.main_service.locations.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import ru.practicum.main_service.locations.model.LocationStatus;
 
 import javax.validation.constraints.*;
 

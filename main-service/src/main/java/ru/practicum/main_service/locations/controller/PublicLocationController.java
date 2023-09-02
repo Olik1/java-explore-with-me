@@ -6,7 +6,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.main_service.locations.dto.LocationResponseDto;
 import ru.practicum.main_service.locations.dto.NewLocationDto;
-import ru.practicum.main_service.locations.model.LocationStatus;
 import ru.practicum.main_service.locations.service.LocationService;
 
 import javax.validation.Valid;

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.main_service.locations.dto.LocationResponseDto;
 import ru.practicum.main_service.locations.dto.NewLocationDto;
 import ru.practicum.main_service.locations.dto.UpdateLocationDto;
-import ru.practicum.main_service.locations.model.LocationStatus;
 import ru.practicum.main_service.locations.service.LocationService;
 
 import javax.validation.Valid;
