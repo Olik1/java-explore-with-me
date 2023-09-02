@@ -599,14 +599,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/admin/locations/109",
+							"raw": "{{baseUrl}}/admin/locations/110",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"admin",
 								"locations",
-								"109"
+								"110"
 							]
 						}
 					},
@@ -808,7 +808,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/events/locations?locationId=1",
+							"raw": "{{baseUrl}}/events/locations?locationId=109",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -819,7 +819,7 @@
 							"query": [
 								{
 									"key": "locationId",
-									"value": "1"
+									"value": "109"
 								}
 							]
 						}
