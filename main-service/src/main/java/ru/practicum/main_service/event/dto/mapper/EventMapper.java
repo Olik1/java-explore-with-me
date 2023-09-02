@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class EventMapper {
 
-    public static EventFullDto toEventFullDto(Event event) {
+    public EventFullDto toEventFullDto(Event event) {
         EventFullDto eventFullDto = EventFullDto.builder()
                 .annotation(event.getAnnotation())
                 .category(CategoriesMapper.toCategoryDto(event.getCategory()))
@@ -48,7 +48,7 @@ public class EventMapper {
         return eventFullDto;
     }
 
-    public static NewEventDto toNewEventDtoDto(Event event) {
+    public NewEventDto toNewEventDtoDto(Event event) {
         return NewEventDto.builder()
                 .annotation(event.getAnnotation())
                 .category(event.getCategory().getId())
@@ -62,7 +62,7 @@ public class EventMapper {
                 .build();
     }
 
-    public static EventShortDto toEventShortDto(Event event, CategoryDto categoryDto, UserDto userDto) {
+    public EventShortDto toEventShortDto(Event event, CategoryDto categoryDto, UserDto userDto) {
         return EventShortDto.builder()
                 .id(event.getId())
                 .annotation(event.getAnnotation())
@@ -76,7 +76,7 @@ public class EventMapper {
 
     }
 
-    public static EventShortDto mapToShortDto(Event event) {
+    public EventShortDto mapToShortDto(Event event) {
         return EventShortDto.builder()
                 .annotation(event.getAnnotation())
                 .category(CategoriesMapper.toCategoryDto(event.getCategory()))
@@ -94,7 +94,7 @@ public class EventMapper {
                 .collect(Collectors.toList());
     }
 
-    public static Event toEvent(NewEventDto newEventDto, Categories categories, Location location, User user) {
+    public Event toEvent(NewEventDto newEventDto, Categories categories, Location location, User user) {
         return Event.builder()
                 .annotation(newEventDto.getAnnotation())
                 .category(categories)

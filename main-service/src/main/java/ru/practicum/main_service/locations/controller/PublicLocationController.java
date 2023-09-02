@@ -2,6 +2,7 @@ package ru.practicum.main_service.locations.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.main_service.locations.dto.LocationResponseDto;
 import ru.practicum.main_service.locations.dto.NewLocationtDto;
@@ -11,6 +12,7 @@ import ru.practicum.main_service.locations.service.LocationService;
 import javax.validation.Valid;
 import java.util.List;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/locations")

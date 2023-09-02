@@ -12,6 +12,7 @@ import ru.practicum.main_service.event.service.EventService;
 import javax.validation.constraints.Min;
 import java.util.List;
 
+@Validated
 @RestController
 @Slf4j
 @RequiredArgsConstructor
