@@ -12,18 +12,17 @@ public class LocationMapper {
                 .build();
     }
 
-    public Location toLocation(NewLocationtDto newLocationtDto) {
+    public Location toLocation(NewLocationDto newLocationDto) {
         return Location.builder()
-                .name(newLocationtDto.getName())
-                .status(newLocationtDto.getStatus())
-                .lat(newLocationtDto.getLat())
-                .lon(newLocationtDto.getLon())
-                .radius(newLocationtDto.getRadius())
+                .name(newLocationDto.getName())
+                .lat(newLocationDto.getLat())
+                .lon(newLocationDto.getLon())
+                .radius(newLocationDto.getRadius())
                 .build();
     }
 
-    public NewLocationtDto toNewLocationtDto(Location location) {
-        return NewLocationtDto.builder()
+    public LocationResponseDto toNewLocationtDto(Location location) {
+        return LocationResponseDto.builder()
                 .id(location.getId())
                 .name(location.getName())
                 .lat(location.getLat())
@@ -40,6 +39,7 @@ public class LocationMapper {
                 .lat(location.getLat())
                 .lon(location.getLon())
                 .radius(location.getRadius())
+                .status(location.getStatus())
                 .build();
     }
 }

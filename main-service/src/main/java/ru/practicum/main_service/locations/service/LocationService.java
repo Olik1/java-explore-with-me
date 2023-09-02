@@ -1,21 +1,22 @@
 package ru.practicum.main_service.locations.service;
 
 import ru.practicum.main_service.locations.dto.LocationResponseDto;
-import ru.practicum.main_service.locations.dto.NewLocationtDto;
+import ru.practicum.main_service.locations.dto.NewLocationDto;
+import ru.practicum.main_service.locations.dto.UpdateLocationDto;
 
 import java.util.List;
 
 public interface LocationService {
-    NewLocationtDto createLocation(NewLocationtDto newLocationtDto);
+    LocationResponseDto createLocation(NewLocationDto newLocationDto, boolean isAdmin);
 
     void deleteLocation(long id);
 
-    NewLocationtDto updateLocation(long id, NewLocationtDto newLocationtDto);
+    LocationResponseDto updateLocation(long id, UpdateLocationDto updateLocationDto);
 
     LocationResponseDto getLocation(long id);
 
     List<LocationResponseDto> getLocations(Integer from, Integer size);
 
-    NewLocationtDto confirmLocation(long id, boolean approved);
+    LocationResponseDto confirmLocation(long id, boolean approved);
 
 }

@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.main_service.locations.dto.NewLocationtDto;
+import ru.practicum.main_service.locations.dto.LocationResponseDto;
+import ru.practicum.main_service.locations.dto.NewLocationDto;
+import ru.practicum.main_service.locations.dto.UpdateLocationDto;
 import ru.practicum.main_service.locations.model.LocationStatus;
 import ru.practicum.main_service.locations.service.LocationService;
 
@@ -19,16 +21,15 @@ public class AdminLocationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public NewLocationtDto createLocation(@RequestBody @Valid NewLocationtDto newLocationtDto) {
-        newLocationtDto.setStatus(LocationStatus.APPROVED);
-        var result = locationService.createLocation(newLocationtDto);
+    public LocationResponseDto createLocation(@RequestBody @Valid NewLocationDto newLocationDto) {
+        var result = locationService.createLocation(newLocationDto, true);
         return result;
     }
 
     @PatchMapping("/{id}")
-    public NewLocationtDto updateLocation(@PathVariable long id,
-                                          @RequestBody @Valid NewLocationtDto newLocationtDto) {
-        return locationService.updateLocation(id, newLocationtDto);
+    public LocationResponseDto updateLocation(@PathVariable long id,
+                                              @RequestBody @Valid UpdateLocationDto updateLocationDto) {
+        return locationService.updateLocation(id, updateLocationDto);
     }
 
     @DeleteMapping("/{id}")
@@ -37,8 +38,8 @@ public class AdminLocationController {
     }
 
     @PatchMapping("/confirm/{id}")
-    public NewLocationtDto confirmLocation(@PathVariable long id,
-                                           @RequestBody boolean approved) {
+    public LocationResponseDto confirmLocation(@PathVariable long id,
+                                               @RequestBody boolean approved) {
         return locationService.confirmLocation(id, approved);
     }
 }

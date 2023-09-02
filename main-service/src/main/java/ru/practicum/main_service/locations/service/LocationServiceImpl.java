@@ -10,7 +10,8 @@ import ru.practicum.main_service.exception.ObjectNotFoundException;
 import ru.practicum.main_service.locations.LocationRepository;
 import ru.practicum.main_service.locations.dto.LocationMapper;
 import ru.practicum.main_service.locations.dto.LocationResponseDto;
-import ru.practicum.main_service.locations.dto.NewLocationtDto;
+import ru.practicum.main_service.locations.dto.NewLocationDto;
+import ru.practicum.main_service.locations.dto.UpdateLocationDto;
 import ru.practicum.main_service.locations.model.Location;
 import ru.practicum.main_service.locations.model.LocationStatus;
 
@@ -24,17 +25,17 @@ public class LocationServiceImpl implements LocationService {
     private final LocationRepository locationRepository;
 
     @Override
-    public NewLocationtDto createLocation(NewLocationtDto newLocationtDto) {
-        if (locationRepository.existsLocationByName(newLocationtDto.getName())) {
+    public LocationResponseDto createLocation(NewLocationDto newLocationDto, boolean isAdmin) {
+        if (locationRepository.existsLocationByName(newLocationDto.getName())) {
             throw new ConflictException("Такая локация уже существует!");
         }
-        if (locationRepository.existsLocationByLatAndLon(newLocationtDto.getLat(), newLocationtDto.getLon())) {
+        if (locationRepository.existsLocationByLatAndLon(newLocationDto.getLat(), newLocationDto.getLon())) {
             throw new ConflictException("Такие координаты уже существуют!");
         }
-        Location location = LocationMapper.toLocation(newLocationtDto);
-        location.setStatus(newLocationtDto.getStatus());
+        Location location = LocationMapper.toLocation(newLocationDto);
+        location.setStatus(isAdmin ? LocationStatus.APPROVED : LocationStatus.PENDING);
         locationRepository.save(location);
-        log.info("Запрос POST на добавление локации, с id: {}", newLocationtDto.getId());
+        log.info("Запрос POST на добавление локации, с id: {}", location.getId());
         var result = LocationMapper.toNewLocationtDto(location);
         return result;
     }
@@ -50,19 +51,19 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public NewLocationtDto updateLocation(long id, NewLocationtDto newLocationtDto) {
+    public LocationResponseDto updateLocation(long id, UpdateLocationDto updateLocationDto) {
         Location location = findLocationById(id);
-        if (newLocationtDto.getLat() != null) {
-            location.setLat(newLocationtDto.getLat());
+        if (updateLocationDto.getLat() != null) {
+            location.setLat(updateLocationDto.getLat());
         }
-        if (newLocationtDto.getLon() != null) {
-            location.setLon(newLocationtDto.getLon());
+        if (updateLocationDto.getLon() != null) {
+            location.setLon(updateLocationDto.getLon());
         }
-        if (newLocationtDto.getName() != null) {
-            location.setName(newLocationtDto.getName());
+        if (updateLocationDto.getName() != null) {
+            location.setName(updateLocationDto.getName());
         }
-        if (newLocationtDto.getRadius() != null) {
-            location.setRadius(newLocationtDto.getRadius());
+        if (updateLocationDto.getRadius() != null) {
+            location.setRadius(updateLocationDto.getRadius());
         }
 
         locationRepository.save(location);
@@ -91,7 +92,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public NewLocationtDto confirmLocation(long id, boolean approved) {
+    public LocationResponseDto confirmLocation(long id, boolean approved) {
         Location location = findLocationById(id);
         location.setStatus(approved ? LocationStatus.APPROVED : LocationStatus.CANCELED);
         locationRepository.save(location);
