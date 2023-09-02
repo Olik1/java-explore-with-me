@@ -10,7 +10,7 @@
 			"name": "POST",
 			"item": [
 				{
-					"name": "добавление локации админом 11",
+					"name": "добавление локации админом 109",
 					"event": [
 						{
 							"listen": "test",
@@ -69,7 +69,7 @@
 					"response": []
 				},
 				{
-					"name": "добавление локации админом 2",
+					"name": "добавление локации админом 110",
 					"event": [
 						{
 							"listen": "test",
@@ -128,7 +128,7 @@
 					"response": []
 				},
 				{
-					"name": "добавление локации пользователем",
+					"name": "добавление локации пользователеми 111",
 					"event": [
 						{
 							"listen": "test",
@@ -144,7 +144,7 @@
 									"var query = {};\r",
 									"pm.request.url.query.all().forEach((param) => { query[param.key] = param.value});\r",
 									"\r",
-									"pm.test(\"При создании у локации должен быть статус APPROVED\", function () {\r",
+									"pm.test(\"При создании у локации должен быть статус PENDING\", function () {\r",
 									"    pm.expect(target.status).equal(\"PENDING\");\r",
 									"});\r",
 									"\r",
@@ -166,7 +166,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"г.Мвыосква\",\r\n    \"lat\": 5335.8829,\r\n    \"lon\": 123.3456,\r\n    \"radius\": 2.0\r\n}",
+							"raw": "{\r\n    \"name\": \"г.Питер\",\r\n    \"lat\": 53.8888,\r\n    \"lon\": 12.1111,\r\n    \"radius\": 2.0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -230,58 +230,6 @@
 					"response": []
 				},
 				{
-					"name": "добавление пользователя",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
-									"    pm.response.to.have.status(201);\r",
-									"    pm.response.to.be.withBody;\r",
-									"    pm.response.to.be.json;\r",
-									"});\r",
-									"\r",
-									"const source = JSON.parse(pm.request.body.raw);\r",
-									"const target = pm.response.json();\r",
-									"\r",
-									"pm.test(\"Пользователь должен содержать поля: id, name, email\", function () {\r",
-									"pm.expect(target).to.have.property('id');\r",
-									"pm.expect(target).to.have.property('name');\r",
-									"pm.expect(target).to.have.property('email');\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"email\": \"Olga13@yandex.ru\",\r\n  \"name\": \"Ольга Романова\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/admin/users",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"admin",
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "добавление категории",
 					"event": [
 						{
@@ -337,7 +285,65 @@
 					"response": []
 				},
 				{
-					"name": "добавление события 1",
+					"name": "добавление пользователя",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const source = JSON.parse(pm.request.body.raw);\r",
+									"const target = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Пользователь должен содержать поля: id, name, email\", function () {\r",
+									"pm.expect(target).to.have.property('id');\r",
+									"pm.expect(target).to.have.property('name');\r",
+									"pm.expect(target).to.have.property('email');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"Olga13@yandex.ru\",\r\n  \"name\": \"Ольга Романова\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/users?ids={{uid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users"
+							],
+							"query": [
+								{
+									"key": "ids",
+									"value": "{{uid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "добавление события 106",
 					"event": [
 						{
 							"listen": "test",
@@ -388,7 +394,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"annotation\": \"Где-то здесь была аннотация\",\r\n  \"category\": 10,\r\n  \"description\": \"Тут мы добавили описание.\",\r\n  \"eventDate\": \"2024-01-24 10:10:10\",\r\n  \"location\": {\r\n    \"lat\": 55.88209915161133,\r\n    \"lon\": 123.34559631347656\r\n  },\r\n  \"paid\": true,\r\n  \"participantLimit\": 10,\r\n  \"requestModeration\": false,\r\n  \"title\": \"Просмотр Властелина Колец\"\r\n}",
+							"raw": "{\r\n  \"annotation\": \"Где-то здесь была аннотация\",\r\n  \"category\": 1,\r\n  \"description\": \"Тут мы добавили описание.\",\r\n  \"eventDate\": \"2024-01-24 10:10:10\",\r\n  \"location\": {\r\n    \"lat\": 55.88209915161133,\r\n    \"lon\": 123.34559631347656\r\n  },\r\n  \"paid\": true,\r\n  \"participantLimit\": 10,\r\n  \"requestModeration\": false,\r\n  \"title\": \"Просмотр Властелина Колец\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -421,7 +427,7 @@
 			"name": "PATH",
 			"item": [
 				{
-					"name": "изменение статуса мероприятия",
+					"name": "изменение статуса мероприятия 106",
 					"event": [
 						{
 							"listen": "test",
@@ -489,7 +495,7 @@
 					"response": []
 				},
 				{
-					"name": "Изменение координат локации",
+					"name": "Изменение координат локации 109",
 					"event": [
 						{
 							"listen": "test",
@@ -527,7 +533,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"lat\": 55.8821,\r\n    \"lon\": 123.3456,\r\n    \"radius\": 2.0\r\n}",
+							"raw": "{\r\n    \"lat\": 55.8821,\r\n    \"lon\": 123.3444,\r\n    \"radius\": 2.0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -549,7 +555,7 @@
 					"response": []
 				},
 				{
-					"name": "изменение статуса локации",
+					"name": "изменение статуса локации 109",
 					"event": [
 						{
 							"listen": "test",
@@ -593,14 +599,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/admin/locations/110",
+							"raw": "{{baseUrl}}/admin/locations/109",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"admin",
 								"locations",
-								"110"
+								"109"
 							]
 						}
 					},
@@ -621,7 +627,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/admin/locations/confirm/108",
+							"raw": "{{baseUrl}}/admin/locations/confirm/111",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -629,7 +635,7 @@
 								"admin",
 								"locations",
 								"confirm",
-								"108"
+								"111"
 							]
 						}
 					},
@@ -641,7 +647,7 @@
 			"name": "GET",
 			"item": [
 				{
-					"name": "получение локации по id",
+					"name": "получение локации по id 109",
 					"event": [
 						{
 							"listen": "test",
@@ -735,7 +741,7 @@
 					"response": []
 				},
 				{
-					"name": "получение локации по координатам",
+					"name": "получение локации по координатам 109",
 					"event": [
 						{
 							"listen": "test",
@@ -782,7 +788,7 @@
 					"response": []
 				},
 				{
-					"name": "получение событий по локации по  айди",
+					"name": "получение событий по локации по  айди 110",
 					"event": [
 						{
 							"listen": "test",
@@ -802,7 +808,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/events/locations?locationId=109",
+							"raw": "{{baseUrl}}/events/locations?locationId=1",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -813,7 +819,7 @@
 							"query": [
 								{
 									"key": "locationId",
-									"value": "109"
+									"value": "1"
 								}
 							]
 						}
