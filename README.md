@@ -53,17 +53,5 @@
 
 ``` GET /locations/{locationId} - Получение локации по Id ```
 
-#### _Используемые технологии:_
-* Java 11
-* Spring Boot
-* PostgreSQL
-* Hibernate
-* Maven
-* Lombok
-* Junit5
-* Mockito
-* Postman
-* Docker
-
 ![](schema.png)
 ссылка на диаграмму - https://dbdiagram.io/d/64f70baa02bd1c4a5efe21fb
