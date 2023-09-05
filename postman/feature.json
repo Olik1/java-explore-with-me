@@ -1,0 +1,880 @@
+{
+	"info": {
+		"_postman_id": "89bfc3cc-9e20-4fa5-9c06-fba51887196f",
+		"name": "Test Location",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29186161"
+	},
+	"item": [
+		{
+			"name": "POST",
+			"item": [
+				{
+					"name": "добавление локации админом 109",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+									"    pm.response.to.have.status(201);   \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json();\r",
+									"var query = {};\r",
+									"pm.request.url.query.all().forEach((param) => { query[param.key] = param.value});\r",
+									"\r",
+									"pm.test(\"При создании у локации должен быть статус APPROVED\", function () {\r",
+									"    pm.expect(target.status).equal(\"APPROVED\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Локация должна содержать поля: id, lat, lon, name, radius, status\", function () {\r",
+									"pm.expect(target).to.have.property('id');\r",
+									"pm.expect(target).to.have.property('lat');\r",
+									"pm.expect(target).to.have.property('lon');\r",
+									"pm.expect(target).to.have.property('name');\r",
+									"pm.expect(target).to.have.property('radius');\r",
+									"pm.expect(target).to.have.property('status');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"г.Москва\",\r\n    \"lat\": 55.8829,\r\n    \"lon\": 123.3456,\r\n    \"radius\": 2.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/locations",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "добавление локации админом 110",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+									"    pm.response.to.have.status(201);   \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json();\r",
+									"var query = {};\r",
+									"pm.request.url.query.all().forEach((param) => { query[param.key] = param.value});\r",
+									"\r",
+									"pm.test(\"При создании у локации должен быть статус APPROVED\", function () {\r",
+									"    pm.expect(target.status).equal(\"APPROVED\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Локация должна содержать поля: id, lat, lon, name, radius, status\", function () {\r",
+									"pm.expect(target).to.have.property('id');\r",
+									"pm.expect(target).to.have.property('lat');\r",
+									"pm.expect(target).to.have.property('lon');\r",
+									"pm.expect(target).to.have.property('name');\r",
+									"pm.expect(target).to.have.property('radius');\r",
+									"pm.expect(target).to.have.property('status');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Улица Чистова\",\r\n    \"lat\": 66.8821,\r\n    \"lon\": 122.3456,\r\n    \"radius\": 4.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/locations",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "добавление локации пользователеми 111",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+									"    pm.response.to.have.status(201);   \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json();\r",
+									"var query = {};\r",
+									"pm.request.url.query.all().forEach((param) => { query[param.key] = param.value});\r",
+									"\r",
+									"pm.test(\"При создании у локации должен быть статус PENDING\", function () {\r",
+									"    pm.expect(target.status).equal(\"PENDING\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Локация должна содержать поля: id, lat, lon, name, radius, status\", function () {\r",
+									"pm.expect(target).to.have.property('id');\r",
+									"pm.expect(target).to.have.property('lat');\r",
+									"pm.expect(target).to.have.property('lon');\r",
+									"pm.expect(target).to.have.property('name');\r",
+									"pm.expect(target).to.have.property('radius');\r",
+									"pm.expect(target).to.have.property('status');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"г.Питер\",\r\n    \"lat\": 53.8888,\r\n    \"lon\": 12.1111,\r\n    \"radius\": 2.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/locations",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "проверка некорректного добавления локации",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 409\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(409);\r",
+									"});\r",
+									"pm.test(\"Has error response\", function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Улица Чистова\",\r\n    \"lat\": 66.8821,\r\n    \"lon\": 122.3456,\r\n    \"radius\": 4.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/locations",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"locations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "добавление категории",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const source = JSON.parse(pm.request.body.raw);\r",
+									"const target = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Категория должна содержать поля: id, name\", function () {\r",
+									"pm.expect(target).to.have.property('id');\r",
+									"pm.expect(target).to.have.property('name');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+									"    pm.expect(target.id).to.not.be.null;\r",
+									"    pm.expect(source.name).equal(target.name, 'Название категории должно совпадать с отправленным');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Концерты\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/categories",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "добавление пользователя",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const source = JSON.parse(pm.request.body.raw);\r",
+									"const target = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Пользователь должен содержать поля: id, name, email\", function () {\r",
+									"pm.expect(target).to.have.property('id');\r",
+									"pm.expect(target).to.have.property('name');\r",
+									"pm.expect(target).to.have.property('email');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"Olga13@yandex.ru\",\r\n  \"name\": \"Ольга Романова\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/users?ids={{uid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users"
+							],
+							"query": [
+								{
+									"key": "ids",
+									"value": "{{uid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "добавление события 106",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+									"    pm.response.to.have.status(201);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const source = JSON.parse(pm.request.body.raw);\r",
+									"const target = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Событие должно содержать поля: id, title, annotation, category, paid, eventDate, initiator, description, participantLimit, state, createdOn, location, requestModeration\", function () {\r",
+									"pm.expect(target).to.have.property('id');\r",
+									"pm.expect(target).to.have.property('title');\r",
+									"pm.expect(target).to.have.property('annotation');\r",
+									"pm.expect(target).to.have.property('category');\r",
+									"pm.expect(target).to.have.property('paid');\r",
+									"pm.expect(target).to.have.property('eventDate');\r",
+									"pm.expect(target).to.have.property('initiator');\r",
+									"pm.expect(target).to.have.property('description');\r",
+									"pm.expect(target).to.have.property('participantLimit');\r",
+									"pm.expect(target).to.have.property('state');\r",
+									"pm.expect(target).to.have.property('createdOn');\r",
+									"pm.expect(target).to.have.property('location');\r",
+									"pm.expect(target).to.have.property('requestModeration');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+									"    pm.expect(target.id).to.not.be.null;\r",
+									"    pm.expect(target.title).equal(source.title, 'Название события должно соответствовать названию события в запросе');\r",
+									"    pm.expect(target.annotation).equal(source.annotation, 'Аннотация события должна соответствовать аннотации события в запросе');\r",
+									"    pm.expect(target.paid.toString()).equal(source.paid.toString(), 'Стоимость события должна соответствовать стоимости события в запросе');\r",
+									"    pm.expect(target.eventDate).equal(source.eventDate, 'Дата проведения события должна соответствовать дате проведения события в запросе');\r",
+									"    pm.expect(target.description).equal(source.description, 'Описание события должно соответствовать описание события в запросе');\r",
+									"    pm.expect(target.participantLimit.toString()).equal(source.participantLimit.toString(), 'Лимит участников события должно соответствовать лимиту участников события в запросе');\r",
+									"    pm.expect(target.requestModeration.toString()).equal(source.requestModeration.toString(), 'Необходимость модерации события должна соответствовать необходимости модерации события в запросе');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"annotation\": \"Где-то здесь была аннотация\",\r\n  \"category\": 1,\r\n  \"description\": \"Тут мы добавили описание.\",\r\n  \"eventDate\": \"2024-01-24 10:10:10\",\r\n  \"location\": {\r\n    \"lat\": 55.88209915161133,\r\n    \"lon\": 123.34559631347656\r\n  },\r\n  \"paid\": true,\r\n  \"participantLimit\": 10,\r\n  \"requestModeration\": false,\r\n  \"title\": \"Просмотр Властелина Колец\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/:userId/events",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								":userId",
+								"events"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{uid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PATH",
+			"item": [
+				{
+					"name": "изменение статуса мероприятия 106",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+									"    pm.response.to.have.status(200);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const source = JSON.parse(pm.request.body.raw);\r",
+									"const target = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Событие должно содержать поля: id, title, annotation, category, paid, eventDate, initiator, description, participantLimit, state, createdOn, location, requestModeration\", function () {\r",
+									"pm.expect(target).to.have.property('id');\r",
+									"pm.expect(target).to.have.property('title');\r",
+									"pm.expect(target).to.have.property('annotation');\r",
+									"pm.expect(target).to.have.property('category');\r",
+									"pm.expect(target).to.have.property('paid');\r",
+									"pm.expect(target).to.have.property('eventDate');\r",
+									"pm.expect(target).to.have.property('initiator');\r",
+									"pm.expect(target).to.have.property('description');\r",
+									"pm.expect(target).to.have.property('participantLimit');\r",
+									"pm.expect(target).to.have.property('state');\r",
+									"pm.expect(target).to.have.property('createdOn');\r",
+									"pm.expect(target).to.have.property('location');\r",
+									"pm.expect(target).to.have.property('requestModeration');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"stateAction\": \"PUBLISH_EVENT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/events/:eventId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"events",
+								":eventId"
+							],
+							"variable": [
+								{
+									"key": "eventId",
+									"value": "106"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Изменение координат локации 109",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+									"    pm.response.to.have.status(200);   \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json();\r",
+									"var query = {};\r",
+									"pm.request.url.query.all().forEach((param) => { query[param.key] = param.value});\r",
+									"\r",
+									"pm.test(\"При создании у локации должен быть статус APPROVED\", function () {\r",
+									"    pm.expect(target.status).equal(\"APPROVED\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Локация должна содержать поля: id, lat, lon, name, radius, status\", function () {\r",
+									"pm.expect(target).to.have.property('id');\r",
+									"pm.expect(target).to.have.property('lat');\r",
+									"pm.expect(target).to.have.property('lon');\r",
+									"pm.expect(target).to.have.property('name');\r",
+									"pm.expect(target).to.have.property('radius');\r",
+									"pm.expect(target).to.have.property('status');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"lat\": 55.8821,\r\n    \"lon\": 123.3444,\r\n    \"radius\": 2.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/locations/109",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"locations",
+								"109"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "изменение статуса локации 109",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const source = pm.collectionVariables.get('response');\r",
+									"const target = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Локация должна содержать поля: id, lat, lon, name, radius, status\", function () {\r",
+									"pm.expect(target).to.have.property('id');\r",
+									"pm.expect(target).to.have.property('lat');\r",
+									"pm.expect(target).to.have.property('lon');\r",
+									"pm.expect(target).to.have.property('name');\r",
+									"pm.expect(target).to.have.property('radius');\r",
+									"pm.expect(target).to.have.property('status');\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": \"CANCELED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/locations/110",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"locations",
+								"110"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "подтверждение статуса администратором",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "true",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/locations/confirm/111",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"locations",
+								"confirm",
+								"111"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GET",
+			"item": [
+				{
+					"name": "получение локации по id 109",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+									"    pm.response.to.have.status(200);   \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const source = pm.collectionVariables.get('response');\r",
+									"const target = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Локация должна содержать поля: id, lat, lon, name, radius\", function () {\r",
+									"pm.expect(target).to.have.property('id');\r",
+									"pm.expect(target).to.have.property('lat');\r",
+									"pm.expect(target).to.have.property('lon');\r",
+									"pm.expect(target).to.have.property('name');\r",
+									"pm.expect(target).to.have.property('radius');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/locations/:Id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"locations",
+								":Id"
+							],
+							"variable": [
+								{
+									"key": "Id",
+									"value": "109"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "получение списка событий",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/locations?from=0&size=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"locations"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "получение локации по координатам 109",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 or 201 and response is an array of size 1\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+									"    pm.expect(pm.response.json()).is.an('array');\r",
+									"    pm.expect(pm.response.json()).to.have.length(1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/events/locations?lat=55.88209915161133&lon=123.34559631347656&rad=2.0",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"events",
+								"locations"
+							],
+							"query": [
+								{
+									"key": "lat",
+									"value": "55.88209915161133"
+								},
+								{
+									"key": "lon",
+									"value": "123.34559631347656"
+								},
+								{
+									"key": "rad",
+									"value": "2.0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "получение событий по локации по  айди 110",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 and response is an array of size 1\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"    pm.expect(pm.response.json()).to.be.an('array');\r",
+									"    pm.expect(pm.response.json()).to.have.length(1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/events/locations?locationId=109",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"events",
+								"locations"
+							],
+							"query": [
+								{
+									"key": "locationId",
+									"value": "109"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DELETE",
+			"item": [
+				{
+					"name": "Удаление локации",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/locations/109",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"locations",
+								"109"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080"
+		},
+		{
+			"key": "uid",
+			"value": "1"
+		}
+	]
+}

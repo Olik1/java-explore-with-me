@@ -8,8 +8,9 @@ import ru.practicum.main_service.event.dto.EventFullDto;
 import ru.practicum.main_service.event.dto.EventShortDto;
 import ru.practicum.main_service.event.dto.NewEventDto;
 import ru.practicum.main_service.event.model.Event;
-import ru.practicum.main_service.event.model.Location;
 import ru.practicum.main_service.event.model.State;
+import ru.practicum.main_service.locations.dto.LocationMapper;
+import ru.practicum.main_service.locations.model.Location;
 import ru.practicum.main_service.request.model.ParticipationRequestStatus;
 import ru.practicum.main_service.users.dto.UserDto;
 import ru.practicum.main_service.users.dto.UserMapper;
@@ -17,11 +18,12 @@ import ru.practicum.main_service.users.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @UtilityClass
 public class EventMapper {
 
-    public static EventFullDto toEventFullDto(Event event) {
+    public EventFullDto toEventFullDto(Event event) {
         EventFullDto eventFullDto = EventFullDto.builder()
                 .annotation(event.getAnnotation())
                 .category(CategoriesMapper.toCategoryDto(event.getCategory()))
@@ -40,13 +42,13 @@ public class EventMapper {
                 .build();
         if (event.getParticipationRequests() != null && !event.getParticipationRequests().isEmpty()) {
             eventFullDto.setConfirmedRequests(event.getParticipationRequests().stream()
-                             .filter(participationRequest -> participationRequest.getStatus() == ParticipationRequestStatus.CONFIRMED)
+                    .filter(participationRequest -> participationRequest.getStatus() == ParticipationRequestStatus.CONFIRMED)
                     .count());
         } else eventFullDto.setConfirmedRequests(0L);
         return eventFullDto;
     }
 
-    public static NewEventDto toNewEventDtoDto(Event event) {
+    public NewEventDto toNewEventDtoDto(Event event) {
         return NewEventDto.builder()
                 .annotation(event.getAnnotation())
                 .category(event.getCategory().getId())
@@ -60,7 +62,7 @@ public class EventMapper {
                 .build();
     }
 
-    public static EventShortDto toEventShortDto(Event event, CategoryDto categoryDto, UserDto userDto) {
+    public EventShortDto toEventShortDto(Event event, CategoryDto categoryDto, UserDto userDto) {
         return EventShortDto.builder()
                 .id(event.getId())
                 .annotation(event.getAnnotation())
@@ -74,7 +76,7 @@ public class EventMapper {
 
     }
 
-    public static EventShortDto mapToShortDto(Event event) {
+    public EventShortDto mapToShortDto(Event event) {
         return EventShortDto.builder()
                 .annotation(event.getAnnotation())
                 .category(CategoriesMapper.toCategoryDto(event.getCategory()))
@@ -86,7 +88,13 @@ public class EventMapper {
                 .build();
     }
 
-    public static Event toEvent(NewEventDto newEventDto, Categories categories, Location location, User user) {
+    public List<EventShortDto> mapToShortDto(List<Event> events) {
+        return events.stream()
+                .map(EventMapper::mapToShortDto)
+                .collect(Collectors.toList());
+    }
+
+    public Event toEvent(NewEventDto newEventDto, Categories categories, Location location, User user) {
         return Event.builder()
                 .annotation(newEventDto.getAnnotation())
                 .category(categories)

@@ -29,4 +29,7 @@ public interface EventService {
     List<EventFullDto> adminGetEvents(List<Long> userIds, List<State> states, List<Long> categories, String rangeStart, String rangeEnd, Integer from, Integer size);
 
     EventFullDto adminUpdateEvent(Long eventId, UpdateEventRequestDto requestDto);
+
+    List<EventShortDto> getEventsListInLocation(Long locationId, Float lat, Float lon,
+                                            Float radius, Integer from, Integer size);
 }

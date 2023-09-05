@@ -2,6 +2,7 @@ package ru.practicum.main_service.event.model;
 
 import lombok.*;
 import ru.practicum.main_service.categories.model.Categories;
+import ru.practicum.main_service.locations.model.Location;
 import ru.practicum.main_service.request.model.Request;
 import ru.practicum.main_service.users.model.User;
 

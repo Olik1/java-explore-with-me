@@ -8,7 +8,7 @@ import ru.practicum.model.ViewStats;
 
 @UtilityClass
 public class StatsMapper {
-    public static StatsModel toStats(HitRequestDto endpointHitRequestDto) {
+    public StatsModel toStats(HitRequestDto endpointHitRequestDto) {
         return StatsModel.builder()
                 .ip(endpointHitRequestDto.getIp())
                 .timestamp(endpointHitRequestDto.getTimestamp())
@@ -17,7 +17,7 @@ public class StatsMapper {
                 .build();
     }
 
-    public static StatsResponseDto toStatsResponseDto(ViewStats viewStats) {
+    public StatsResponseDto toStatsResponseDto(ViewStats viewStats) {
         return StatsResponseDto.builder()
                 .app(viewStats.getApp())
                 .uri(viewStats.getUri())
